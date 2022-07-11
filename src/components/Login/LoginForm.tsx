@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
 import {
   TextInput,
   PasswordInput,
@@ -7,19 +10,15 @@ import {
   Anchor,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { z } from 'zod';
-import { SetStateAction } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email' }),
   password: z.string().min(6),
 });
 
-interface LoginFormProps {
-  toggle: (value?: SetStateAction<string> | undefined) => void;
-}
+export const LoginForm = () => {
+  const navigate = useNavigate();
 
-export const LoginForm = ({ toggle }: LoginFormProps) => {
   const form = useForm({
     initialValues: {
       email: '',
@@ -28,29 +27,24 @@ export const LoginForm = ({ toggle }: LoginFormProps) => {
     schema: zodResolver(loginSchema),
   });
 
+  const handleSubmit = (values: typeof form.values) => {
+    console.log(values);
+  };
+
   return (
-    <form onSubmit={form.onSubmit(() => {})}>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Group direction='column' grow>
         <TextInput
           required
           label='Email'
           placeholder='hello@mantine.dev'
-          value={form.values.email}
-          onChange={(event) =>
-            form.setFieldValue('email', event.currentTarget.value)
-          }
-          error={form.errors.email}
+          {...form.getInputProps('email')}
         />
-
         <PasswordInput
           required
           label='Password'
           placeholder='Your password'
-          value={form.values.password}
-          onChange={(event) =>
-            form.setFieldValue('password', event.currentTarget.value)
-          }
-          error={form.errors.password}
+          {...form.getInputProps('password')}
         />
       </Group>
 
@@ -71,7 +65,7 @@ export const LoginForm = ({ toggle }: LoginFormProps) => {
             component='button'
             type='button'
             color='primary'
-            onClick={() => toggle()}
+            onClick={() => navigate('/register')}
             size='xs'
           >
             Create account

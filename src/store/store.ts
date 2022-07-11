@@ -1,7 +1,10 @@
 import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit';
+import { userReducer } from './userSlice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    user: userReducer,
+  },
   //   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 

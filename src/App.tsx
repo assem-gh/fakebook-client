@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import { useToggle } from '@mantine/hooks';
 
-import LoginPage from './pages/LoginPage';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<'dark' | 'light'>('dark', [
@@ -24,9 +25,12 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Routes>
-          <Route path='login' element={<LoginPage />} />
-        </Routes>
+        <NotificationsProvider position='top-center' autoClose={4000}>
+          <Routes>
+            <Route path='login' element={<LoginPage page='login' />} />
+            <Route path='register' element={<LoginPage page='register' />} />
+          </Routes>
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
