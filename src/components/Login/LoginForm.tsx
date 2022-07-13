@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -11,12 +12,18 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
-const loginSchema = z.object({
+import userApi from '../../api/userApi';
+import { useAppDispatch } from '../../store/hooks';
+
+export const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email' }),
   password: z.string().min(6),
 });
 
 export const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -27,8 +34,15 @@ export const LoginForm = () => {
     schema: zodResolver(loginSchema),
   });
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values);
+  const handleSubmit = async (values: typeof form.values) => {
+    try {
+      setLoading(true);
+      await dispatch(userApi.signin(values)).unwrap();
+      setLoading(false);
+      navigate('/');
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,7 +87,13 @@ export const LoginForm = () => {
         </Text>
       </Group>
 
-      <Button type='submit' fullWidth size='sm' loaderPosition='left'>
+      <Button
+        loading={loading}
+        type='submit'
+        fullWidth
+        size='sm'
+        loaderPosition='left'
+      >
         Login
       </Button>
     </form>

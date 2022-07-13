@@ -2,7 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
-import { RegisterPayload, RegisterResponse } from './types';
+import {
+  LoginPayload,
+  LoginResponse,
+  RegisterPayload,
+  RegisterResponse,
+} from './types';
+import { StorageKey } from '../utils/localStorage';
 
 const signup = createAsyncThunk<
   RegisterResponse,
@@ -14,14 +20,16 @@ const signup = createAsyncThunk<
   try {
     const { data } = await api.post<RegisterResponse>('/users/signup', payload);
     showNotification({
-      message: 'successfully registered ',
+      title: 'successfully registered ',
+      message:
+        'Verification Link sent to your email,please Open the link to verify your account.',
       color: 'green',
     });
 
     const { jwtToken, ...user } = data;
 
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('jwtToken', JSON.stringify(jwtToken));
+    localStorage.setItem(StorageKey.USER, JSON.stringify(user));
+    localStorage.setItem(StorageKey.JWT, JSON.stringify(jwtToken));
 
     return data;
   } catch (error: any) {
@@ -33,4 +41,33 @@ const signup = createAsyncThunk<
   }
 });
 
-export default { signup };
+const signin = createAsyncThunk<
+  LoginResponse,
+  LoginPayload,
+  { rejectValue: any }
+>('user/signin', async (payload, thunkApi) => {
+  try {
+    const { data } = await api.post<LoginResponse>('/users/signin', payload);
+    console.log('Login Response', data);
+
+    showNotification({
+      message: 'successfully logged-in ',
+      color: 'green',
+    });
+
+    const { jwtToken, ...user } = data;
+
+    localStorage.setItem(StorageKey.USER, JSON.stringify(user));
+    localStorage.setItem(StorageKey.JWT, JSON.stringify(jwtToken));
+
+    return data;
+  } catch (error: any) {
+    showNotification({
+      message: error.message,
+      color: 'red',
+    });
+    return thunkApi.rejectWithValue(error.message);
+  }
+});
+
+export default { signup, signin };
