@@ -1,23 +1,26 @@
-import { Text, Paper, PaperProps, Divider, Container } from '@mantine/core';
+import { Paper, Container } from '@mantine/core';
 
+import { ForgotPasswordForm } from '../components/Login/ForgotPasswordForm';
 import { LoginForm } from '../components/Login/LoginForm';
 import { RegisterForm } from '../components/Login/RegisterForm';
+import { ResetPasswordForm } from '../components/Login/ResetPasswordForm';
 
-interface LoginProps extends PaperProps<'div'> {
-  page: 'login' | 'register';
+const forms = {
+  login: <LoginForm />,
+  register: <RegisterForm />,
+  forgot: <ForgotPasswordForm />,
+  reset: <ResetPasswordForm />,
+};
+
+interface LoginPageProps {
+  form: keyof typeof forms;
 }
 
-export const LoginPage = ({ page, ...props }: LoginProps) => {
+export const LoginPage = ({ form }: LoginPageProps) => {
   return (
-    <Container size='xs'>
-      <Paper radius='md' p='xl' withBorder {...props} shadow='xs'>
-        <Text size='xl' weight={600} align='center' color='blue'>
-          Welcome to Fakebook
-        </Text>
-
-        <Divider labelPosition='center' my='lg' />
-
-        {page === 'login' ? <LoginForm /> : <RegisterForm />}
+    <Container size={420} my={40}>
+      <Paper radius='md' p='xl' withBorder shadow='sm'>
+        {forms[form]}
       </Paper>
     </Container>
   );

@@ -7,8 +7,9 @@ import {
   LoginResponse,
   RegisterPayload,
   RegisterResponse,
+  ResetPayload,
 } from './types';
-import { StorageKey } from '../utils/localStorage';
+import { Storage } from '../utils/localStorage';
 
 const signup = createAsyncThunk<
   RegisterResponse,
@@ -28,16 +29,16 @@ const signup = createAsyncThunk<
 
     const { jwtToken, ...user } = data;
 
-    localStorage.setItem(StorageKey.USER, JSON.stringify(user));
-    localStorage.setItem(StorageKey.JWT, JSON.stringify(jwtToken));
+    localStorage.setItem(Storage.User, JSON.stringify(user));
+    localStorage.setItem(Storage.Jwt, JSON.stringify(jwtToken));
 
     return data;
-  } catch (error: any) {
+  } catch (err: any) {
     showNotification({
-      message: error.message,
+      message: err.message,
       color: 'red',
     });
-    return thunkApi.rejectWithValue(error.message);
+    return thunkApi.rejectWithValue(err.message);
   }
 });
 
@@ -57,17 +58,60 @@ const signin = createAsyncThunk<
 
     const { jwtToken, ...user } = data;
 
-    localStorage.setItem(StorageKey.USER, JSON.stringify(user));
-    localStorage.setItem(StorageKey.JWT, JSON.stringify(jwtToken));
+    localStorage.setItem(Storage.User, JSON.stringify(user));
+    localStorage.setItem(Storage.Jwt, JSON.stringify(jwtToken));
 
     return data;
-  } catch (error: any) {
+  } catch (err: any) {
     showNotification({
-      message: error.message,
+      message: err.message,
       color: 'red',
     });
-    return thunkApi.rejectWithValue(error.message);
+    return thunkApi.rejectWithValue(err.message);
   }
 });
 
-export default { signup, signin };
+export const forgotPassword = async (email: string) => {
+  try {
+    const res = await api.post<{ message: string }>('/users/forgot-password', {
+      email,
+    });
+    if (res.status === 200) {
+      showNotification({
+        message: res.data.message,
+        color: 'green',
+        autoClose: false,
+      });
+    }
+  } catch (err: any) {
+    showNotification({
+      message: err.message,
+      color: 'red',
+      autoClose: false,
+    });
+  }
+};
+
+export const resetPassword = async (args: ResetPayload) => {
+  try {
+    const res = await api.post<{ message: string }>(
+      '/users/reset-password',
+      args
+    );
+    if (res.status === 200) {
+      showNotification({
+        message: res.data.message,
+        color: 'green',
+        autoClose: false,
+      });
+    }
+  } catch (err: any) {
+    showNotification({
+      message: err.message,
+      color: 'red',
+      autoClose: false,
+    });
+  }
+};
+
+export default { signup, signin, forgotPassword, resetPassword };

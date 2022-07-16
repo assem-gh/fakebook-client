@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 
@@ -10,13 +11,14 @@ import {
   Anchor,
   RadioGroup,
   Radio,
+  Divider,
+  Text,
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
 
 import userApi from '../../api/userApi';
 import { useAppDispatch } from '../../store/hooks';
-import { useNavigate } from 'react-router-dom';
 
 export const registerSchema = z.object({
   firstName: z.string().min(3),
@@ -65,75 +67,75 @@ export const RegisterForm = ({}: RegisterFormProps) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Group direction='column' grow>
-        <TextInput
-          required
-          label='First Name'
-          placeholder='John'
-          {...form.getInputProps('firstName')}
-        />
-        <TextInput
-          required
-          label='Last Name'
-          placeholder='Doe'
-          {...form.getInputProps('lastName')}
-        />
-        <TextInput
-          required
-          label='Email'
-          placeholder='hello@mail.com'
-          {...form.getInputProps('email')}
-        />
+    <>
+      <Text size='xl' weight={600} align='center' color='blue'>
+        Welcome to Fakebook
+      </Text>
+      <Divider labelPosition='center' my='lg' />
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Group direction='column' grow>
+          <TextInput
+            required
+            label='First Name'
+            placeholder='Your first name'
+            {...form.getInputProps('firstName')}
+          />
+          <TextInput
+            required
+            label='Last Name'
+            placeholder='Your Last name'
+            {...form.getInputProps('lastName')}
+          />
+          <TextInput
+            required
+            label='Email'
+            placeholder='Your Email Address'
+            {...form.getInputProps('email')}
+          />
 
-        <PasswordInput
-          required
-          label='Password'
-          placeholder='Your password'
-          {...form.getInputProps('password')}
-        />
-        <DatePicker
-          placeholder='Pick date'
-          label='Birthday'
-          inputFormat='DD/MM/YYYY'
-          labelFormat='MM/YYYY'
-          {...form.getInputProps('birthday')}
-          required
-        />
-        <RadioGroup
-          label='Select your Gender'
-          {...form.getInputProps('gender')}
-          required
+          <PasswordInput
+            required
+            label='Password'
+            placeholder='Your password'
+            {...form.getInputProps('password')}
+          />
+          <DatePicker
+            placeholder='Pick date'
+            label='Birthday'
+            inputFormat='DD/MM/YYYY'
+            labelFormat='MM/YYYY'
+            {...form.getInputProps('birthday')}
+            required
+          />
+          <RadioGroup
+            label='Select your Gender'
+            {...form.getInputProps('gender')}
+            required
+            size='sm'
+          >
+            <Radio value='male' label='Male' />
+            <Radio value='female' label='Female' />
+            <Radio value='other' label='Other' />
+          </RadioGroup>
+        </Group>
+
+        <Group position='left' mt='lg'>
+          <Anchor component={Link} to='/login' color='primary' size='xs'>
+            Already registered? Login
+          </Anchor>
+        </Group>
+
+        <Button
+          type='submit'
+          fullWidth
           size='sm'
+          loaderPosition='left'
+          mt='xl'
+          loading={loading}
         >
-          <Radio value='male' label='Male' />
-          <Radio value='female' label='Female' />
-          <Radio value='other' label='Other' />
-        </RadioGroup>
-      </Group>
-
-      <Group position='left' mt='lg'>
-        <Anchor
-          component='button'
-          type='button'
-          color='primary'
-          onClick={() => navigate('/login')}
-          size='xs'
-        >
-          Already registered? Login
-        </Anchor>
-      </Group>
-
-      <Button
-        type='submit'
-        fullWidth
-        size='sm'
-        loaderPosition='left'
-        mt='xl'
-        loading={loading}
-      >
-        Register
-      </Button>
-    </form>
+          Register
+        </Button>
+      </form>
+    </>
   );
 };

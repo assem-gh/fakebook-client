@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { UserState } from './types';
 import userApi from '../api/userApi';
-import { loadState, StorageKey } from '../utils/localStorage';
+import { loadState, Storage } from '../utils/localStorage';
 
-const user = loadState(StorageKey.USER);
-const jwtToken = loadState(StorageKey.JWT);
+const user = loadState(Storage.User);
+const jwtToken = loadState(Storage.Jwt);
 
 const initialState: UserState =
   jwtToken && user

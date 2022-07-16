@@ -27,8 +27,16 @@ function App() {
       >
         <NotificationsProvider position='top-center' autoClose={4000}>
           <Routes>
-            <Route path='login' element={<LoginPage page='login' />} />
-            <Route path='register' element={<LoginPage page='register' />} />
+            <Route path='login' element={<LoginPage form='login' />} />
+            <Route path='register' element={<LoginPage form='register' />} />
+            <Route
+              path='forgot-password'
+              element={<LoginPage form='forgot' />}
+            />
+            <Route
+              path='reset-password/:token'
+              element={<LoginPage form='reset' />}
+            />
           </Routes>
         </NotificationsProvider>
       </MantineProvider>

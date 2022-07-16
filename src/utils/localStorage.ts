@@ -1,9 +1,9 @@
-export enum StorageKey {
-  JWT = 'jwtToken',
-  USER = 'user',
+export enum Storage {
+  Jwt = 'jwtToken',
+  User = 'user',
 }
 
-export const loadState = (key: StorageKey) => {
+export const loadState = (key: Storage) => {
   try {
     const serializedState = localStorage.getItem(key);
     if (!serializedState) return undefined;
