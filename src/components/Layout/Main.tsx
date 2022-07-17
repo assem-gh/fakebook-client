@@ -15,7 +15,6 @@ export const Main = ({ children }: MainProps) => {
     <AppShell
       navbarOffsetBreakpoint='sm'
       asideOffsetBreakpoint='sm'
-      fixed
       navbar={<AppNavbar opened={opened} />}
       aside={<AppAside />}
       header={<AppHeader open={opened} setOpen={setOpened} />}

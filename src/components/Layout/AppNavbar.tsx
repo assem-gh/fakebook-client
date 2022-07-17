@@ -2,6 +2,7 @@ import { Navbar } from '@mantine/core';
 
 import { TbHome, TbHeart } from 'react-icons/tb';
 import { BsChatRightDots, BsBookmarkStar } from 'react-icons/bs';
+import { MdOutlineAddBox } from 'react-icons/md';
 
 import { NavbarItem } from './NavbarItem';
 
@@ -18,10 +19,11 @@ export const AppNavbar = ({ opened }: AppNavbarProps) => {
       width={{ xs: 64, md: 200 }}
     >
       <Navbar.Section>
-        <NavbarItem text='Home' icon={<TbHome size={22} />} />
-        <NavbarItem text='Chat' icon={<BsChatRightDots size={22} />} />
-        <NavbarItem text='Liked Posts' icon={<TbHeart size={22} />} />
-        <NavbarItem text='Saved Posts' icon={<BsBookmarkStar size={22} />} />
+        <NavbarItem text='New Post' icon={<MdOutlineAddBox size={18} />} />
+        <NavbarItem text='Home' icon={<TbHome size={18} />} />
+        <NavbarItem text='Chat' icon={<BsChatRightDots size={18} />} />
+        <NavbarItem text='Liked Posts' icon={<TbHeart size={18} />} />
+        <NavbarItem text='Saved Posts' icon={<BsBookmarkStar size={18} />} />
       </Navbar.Section>
     </Navbar>
   );

@@ -15,13 +15,17 @@ import {
 } from '@mantine/core';
 import { TbSearch, TbBell } from 'react-icons/tb';
 
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/images/logo.svg';
 import { UserMenu } from './UserMenu';
 
 const useStyles = createStyles((theme) => ({
   header: {
     paddingLeft: theme.spacing.lg,
     paddingRight: theme.spacing.lg,
+    [theme.fn.smallerThan('xs')]: {
+      paddingLeft: theme.spacing.sm,
+      paddingRight: theme.spacing.sm,
+    },
   },
   inner: {
     height: 56,
@@ -45,16 +49,15 @@ export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
   const { classes, theme } = useStyles();
 
   return (
-    <Header height={56} className={classes.header} mb={120}>
+    <Header height={56} className={classes.header}>
       <div className={classes.inner}>
-        <Group>
+        <Group spacing={8}>
           <MediaQuery largerThan='xs' styles={{ display: 'none' }}>
             <Burger
               opened={open}
               onClick={() => setOpen((pre) => !pre)}
               size='sm'
               color={theme.colors.gray[6]}
-              mr='xl'
             />
           </MediaQuery>
           <Anchor component={Link} to='/'>
@@ -71,6 +74,7 @@ export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
             />
           </Group>
         </Group>
+
         <Group position='apart'>
           <Indicator inline label='4' offset={2} color='red' size={18}>
             <ActionIcon variant='transparent'>

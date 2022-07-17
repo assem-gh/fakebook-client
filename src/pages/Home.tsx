@@ -1,12 +1,14 @@
-import { Paper } from '@mantine/core';
+import { Group } from '@mantine/core';
+
+import { CreatePostBox } from '../components/Feed/CreatePost/CreatePostBox';
 import { Main } from '../components/Layout/Main';
 
 export const Home = () => {
   return (
     <Main>
-      <Paper p='lg' shadow='xs'>
-        Home Page
-      </Paper>
+      <Group direction='column' grow>
+        <CreatePostBox />
+      </Group>
     </Main>
   );
 };
