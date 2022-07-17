@@ -1,3 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   createStyles,
   Header,
@@ -5,17 +8,20 @@ import {
   Group,
   Image,
   Anchor,
+  MediaQuery,
+  Burger,
+  ActionIcon,
+  Indicator,
 } from '@mantine/core';
-import { TbSearch } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
+import { TbSearch, TbBell } from 'react-icons/tb';
 
 import logo from '../../assets/logo.svg';
 import { UserMenu } from './UserMenu';
 
 const useStyles = createStyles((theme) => ({
   header: {
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
+    paddingLeft: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
   },
   inner: {
     height: 56,
@@ -30,13 +36,27 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const Navbar = () => {
-  const { classes } = useStyles();
+interface AppHeaderProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
+  const { classes, theme } = useStyles();
 
   return (
     <Header height={56} className={classes.header} mb={120}>
       <div className={classes.inner}>
         <Group>
+          <MediaQuery largerThan='xs' styles={{ display: 'none' }}>
+            <Burger
+              opened={open}
+              onClick={() => setOpen((pre) => !pre)}
+              size='sm'
+              color={theme.colors.gray[6]}
+              mr='xl'
+            />
+          </MediaQuery>
           <Anchor component={Link} to='/'>
             <Image src={logo} width='124px' />
           </Anchor>
@@ -52,6 +72,11 @@ export const Navbar = () => {
           </Group>
         </Group>
         <Group position='apart'>
+          <Indicator inline label='4' offset={2} color='red' size={18}>
+            <ActionIcon variant='transparent'>
+              <TbBell size={24} />
+            </ActionIcon>
+          </Indicator>
           <UserMenu />
         </Group>
       </div>

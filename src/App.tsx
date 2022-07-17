@@ -4,6 +4,7 @@ import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useToggle } from '@mantine/hooks';
 
+import { Home } from './pages/Home';
 import { LoginPage } from './pages/LoginPage';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       >
         <NotificationsProvider position='top-center' autoClose={4000}>
           <Routes>
+            <Route path='/' element={<Home />} />
             <Route path='login' element={<LoginPage form='login' />} />
             <Route path='register' element={<LoginPage form='register' />} />
             <Route
