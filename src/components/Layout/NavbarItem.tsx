@@ -4,7 +4,7 @@ import { Group, UnstyledButton, Text, createStyles } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
   item: {
-    display: 'block',
+    display: 'flex',
     width: '100%',
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
@@ -19,6 +19,10 @@ const useStyles = createStyles((theme) => ({
   itemText: {
     [theme.fn.smallerThan('md')]: {
       display: 'none',
+    },
+    [theme.fn.smallerThan('xs')]: {
+      display: 'block',
+      fontSize: theme.fontSizes.md,
     },
     fontSize: theme.fontSizes.sm,
   },

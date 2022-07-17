@@ -18,6 +18,15 @@ import { MdVideoLibrary, MdPhotoLibrary } from 'react-icons/md';
 import { useAppSelector } from '../../../store/hooks';
 
 const useStyles = createStyles((theme) => ({
+  inner: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: 0,
+    [theme.fn.largerThan('sm')]: {
+      paddingLeft: theme.spacing.sm,
+      paddingRight: theme.spacing.sm,
+    },
+  },
   emojisButton: {
     color: theme.colors.gray[5],
   },
@@ -46,6 +55,9 @@ export const CreatePostModal = ({
       onClose={() => setOpened(false)}
       title='Create New Post'
       size='lg'
+      classNames={{
+        inner: classes.inner,
+      }}
     >
       <Group direction='column' grow>
         <Group spacing={8}>

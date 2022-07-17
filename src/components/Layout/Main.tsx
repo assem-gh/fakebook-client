@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 
-import { AppShell } from '@mantine/core';
+import { AppShell, Container } from '@mantine/core';
 
 import { AppHeader } from '../Header/Header';
 import { AppNavbar } from './AppNavbar';
@@ -12,22 +12,27 @@ interface MainProps {
 export const Main = ({ children }: MainProps) => {
   const [opened, setOpened] = useState(false);
   return (
-    <AppShell
-      navbarOffsetBreakpoint='sm'
-      asideOffsetBreakpoint='sm'
-      navbar={<AppNavbar opened={opened} />}
-      aside={<AppAside />}
-      header={<AppHeader open={opened} setOpen={setOpened} />}
-      styles={(theme) => ({
-        main: {
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        },
-      })}
-    >
-      {children}
-    </AppShell>
+    <Container size='xl'>
+      <AppShell
+        navbarOffsetBreakpoint='sm'
+        asideOffsetBreakpoint='sm'
+        navbar={<AppNavbar opened={opened} />}
+        aside={<AppAside />}
+        header={<AppHeader open={opened} setOpen={setOpened} />}
+        styles={(theme) => ({
+          main: {
+            backgroundColor:
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[8]
+                : theme.colors.gray[0],
+            [theme.fn.smallerThan('sm')]: {
+              minHeight: 'calc(100vh - 56px)',
+            },
+          },
+        })}
+      >
+        {children}
+      </AppShell>
+    </Container>
   );
 };
