@@ -12,7 +12,7 @@ interface MainProps {
 export const Main = ({ children }: MainProps) => {
   const [opened, setOpened] = useState(false);
   return (
-    <Container size='xl'>
+    <Container size='xl' p={0}>
       <AppShell
         navbarOffsetBreakpoint='sm'
         asideOffsetBreakpoint='sm'

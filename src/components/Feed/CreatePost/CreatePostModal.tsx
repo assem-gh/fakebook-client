@@ -1,10 +1,9 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   Avatar,
   Group,
   Modal,
   Text,
-  Textarea,
   ActionIcon,
   Button,
   createStyles,
@@ -12,10 +11,11 @@ import {
   Divider,
 } from '@mantine/core';
 
-import { TbMoodSmile } from 'react-icons/tb';
 import { MdVideoLibrary, MdPhotoLibrary } from 'react-icons/md';
 
 import { useAppSelector } from '../../../store/hooks';
+import { CreatePostInput } from './CreatePostInput';
+import { PostImageUpload } from './PostImageUpload';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -26,9 +26,6 @@ const useStyles = createStyles((theme) => ({
       paddingLeft: theme.spacing.sm,
       paddingRight: theme.spacing.sm,
     },
-  },
-  emojisButton: {
-    color: theme.colors.gray[5],
   },
 }));
 
@@ -42,12 +39,26 @@ export const CreatePostModal = ({
   setOpened,
 }: CreatePostModalProps) => {
   const [content, setContent] = useState('');
+  const [showDropzone, setShowDropzone] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
 
   const profileImage = useAppSelector((state) => state.user.profileImage);
   const firstName = useAppSelector((state) => state.user.firstName);
   const lastName = useAppSelector((state) => state.user.lastName);
 
   const { classes } = useStyles();
+
+  const handleSendPost = () => {
+    console.log(content);
+  };
+
+  useEffect(() => {
+    if (!opened) {
+      setContent('');
+      setShowDropzone(false);
+      setImages([]);
+    }
+  }, [opened]);
 
   return (
     <Modal
@@ -64,30 +75,31 @@ export const CreatePostModal = ({
           <Avatar radius='xl' src={profileImage} />
           <Text size='xs'>{`${firstName} ${lastName}`}</Text>
         </Group>
-        <Group grow direction='column' spacing={4}>
-          <Textarea
-            value={content}
-            autosize
-            onChange={(e) => setContent(e.currentTarget.value)}
-            placeholder={`What's in your mind, ${firstName}`}
-            minRows={3}
-            maxRows={6}
+
+        <Group grow direction='column' spacing={16}>
+          <CreatePostInput
+            content={content}
+            setContent={setContent}
+            showDropzone={showDropzone}
           />
+          {showDropzone && (
+            <PostImageUpload
+              setShow={setShowDropzone}
+              images={images}
+              setImages={setImages}
+            />
+          )}
         </Group>
+
         <Group position='apart'>
           <Group position='right' sx={{ flexGrow: 1 }}>
-            <Tooltip label='emojis'>
-              <ActionIcon
-                radius='md'
-                variant='transparent'
-                className={classes.emojisButton}
-                p={0}
-              >
-                <TbMoodSmile size={24} />
-              </ActionIcon>
-            </Tooltip>
             <Tooltip label='Photos'>
-              <ActionIcon radius='md' color='green' p={2}>
+              <ActionIcon
+                onClick={() => setShowDropzone(true)}
+                radius='md'
+                color='green'
+                p={2}
+              >
                 <MdPhotoLibrary size={24} />
               </ActionIcon>
             </Tooltip>
@@ -97,8 +109,12 @@ export const CreatePostModal = ({
               </ActionIcon>
             </Tooltip>
           </Group>
+
           <Divider orientation='vertical' sx={{ height: '36px' }} />
-          <Button size='sm'>Post</Button>
+
+          <Button onClick={handleSendPost} size='sm'>
+            Post
+          </Button>
         </Group>
       </Group>
     </Modal>
