@@ -61,9 +61,8 @@ const useStyles = createStyles((theme) => ({
 
 const pickerStyle = {
   position: 'absolute ',
-  top: '36px',
-  right: '0',
-  transform: 'translateX(60%)',
+  top: '42px',
+  right: '6px',
 };
 
 interface EmojiPickerProps {

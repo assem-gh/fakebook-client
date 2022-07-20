@@ -9,13 +9,15 @@ import {
   createStyles,
   Tooltip,
   Divider,
+  LoadingOverlay,
 } from '@mantine/core';
 
 import { MdVideoLibrary, MdPhotoLibrary } from 'react-icons/md';
 
-import { useAppSelector } from '../../../store/hooks';
 import { CreatePostInput } from './CreatePostInput';
 import { PostImageUpload } from './PostImageUpload';
+import postApi from '../../../api/postApi';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -41,15 +43,24 @@ export const CreatePostModal = ({
   const [content, setContent] = useState('');
   const [showDropzone, setShowDropzone] = useState(false);
   const [images, setImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const profileImage = useAppSelector((state) => state.user.profileImage);
   const firstName = useAppSelector((state) => state.user.firstName);
   const lastName = useAppSelector((state) => state.user.lastName);
 
+  const dispatch = useAppDispatch();
   const { classes } = useStyles();
 
-  const handleSendPost = () => {
-    console.log(content);
+  const handleSendPost = async () => {
+    try {
+      setLoading(true);
+      await dispatch(postApi.createPost({ images, content })).unwrap();
+      setLoading(false);
+      setOpened(false);
+    } catch (err: any) {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +86,7 @@ export const CreatePostModal = ({
           <Avatar radius='xl' src={profileImage} />
           <Text size='xs'>{`${firstName} ${lastName}`}</Text>
         </Group>
-
+        <LoadingOverlay visible={loading} />
         <Group grow direction='column' spacing={16}>
           <CreatePostInput
             content={content}
@@ -95,7 +106,7 @@ export const CreatePostModal = ({
           <Group position='right' sx={{ flexGrow: 1 }}>
             <Tooltip label='Photos'>
               <ActionIcon
-                onClick={() => setShowDropzone(true)}
+                onClick={() => setShowDropzone((pre) => !pre)}
                 radius='md'
                 color='green'
                 p={2}

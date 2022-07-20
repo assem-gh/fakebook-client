@@ -49,8 +49,6 @@ const signin = createAsyncThunk<
 >('user/signin', async (payload, thunkApi) => {
   try {
     const { data } = await api.post<LoginResponse>('/users/signin', payload);
-    console.log('Login Response', data);
-
     showNotification({
       message: 'successfully logged-in ',
       color: 'green',

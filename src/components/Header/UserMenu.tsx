@@ -12,7 +12,9 @@ import {
 } from '@mantine/core';
 import { TbLogout, TbMoonStars, TbSettings, TbTrash } from 'react-icons/tb';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { Storage } from '../../utils/localStorage';
+import { logout } from '../../store/userSlice';
 
 const useStyles = createStyles((theme) => ({
   userMenuBtn: {
@@ -28,7 +30,14 @@ export const UserMenu = () => {
 
   const userImage = useAppSelector((state) => state.user.profileImage);
 
+  const dispatch = useAppDispatch();
   const { classes } = useStyles();
+
+  const onLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem(Storage.User);
+    localStorage.removeItem(Storage.Jwt);
+  };
 
   return (
     <Menu
@@ -60,7 +69,9 @@ export const UserMenu = () => {
         Dark Theme
       </Menu.Item>
 
-      <Menu.Item icon={<TbLogout size={14} />}>Logout</Menu.Item>
+      <Menu.Item onClick={onLogout} icon={<TbLogout size={14} />}>
+        Logout
+      </Menu.Item>
 
       <Divider />
 

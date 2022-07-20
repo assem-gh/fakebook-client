@@ -19,3 +19,8 @@ export type LoginPayload = z.infer<typeof loginSchema>;
 export type LoginResponse = RegisterResponse;
 
 export type ResetPayload = z.infer<typeof resetSchema> & { token: string };
+
+export interface CreatePostPayload {
+  content: string;
+  images: File[];
+}

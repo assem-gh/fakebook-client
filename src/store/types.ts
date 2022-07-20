@@ -11,3 +11,12 @@ export interface UserState {
   verified: boolean;
   jwtToken: string;
 }
+
+export interface Post {
+  id: string;
+  content: string;
+  images: string[];
+  createdAt: string;
+  updatedAt: string;
+  owner: string;
+}

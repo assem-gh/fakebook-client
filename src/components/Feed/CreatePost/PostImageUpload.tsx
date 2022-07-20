@@ -18,7 +18,6 @@ const useStyles = createStyles((theme) => ({
         ? `1px solid ${theme.colors.dark[4]}`
         : `1px solid ${theme.colors.gray[4]}`,
   },
-  image: { height: '100%' },
   wrapper: {
     minHeight: 220,
     width: '100%',
@@ -28,11 +27,24 @@ const useStyles = createStyles((theme) => ({
     position: 'absolute',
     top: '8px',
     right: '8px',
+    zIndex: 10,
     '&:hover': {
       backgroundColor:
         theme.colorScheme === 'dark'
           ? theme.colors.dark[4]
           : theme.colors.gray[2],
+    },
+  },
+  previewCloseBtn: {
+    position: 'absolute',
+    top: '14px',
+    right: '14px',
+    zIndex: 10,
+    '&:hover': {
+      backgroundColor:
+        theme.colorScheme === 'light'
+          ? theme.fn.rgba(theme.colors.gray[6], 0.7)
+          : theme.fn.rgba(theme.colors.dark[6], 0.4),
     },
   },
 }));
@@ -66,24 +78,36 @@ export const dropzoneChildren = (setShow: (v: boolean) => void) => {
   );
 };
 
-const Preview = ({ images }: { images: File[] }) => {
+interface PreviewProps {
+  images: File[];
+  setImages: Dispatch<SetStateAction<File[]>>;
+}
+
+const Preview = ({ images, setImages }: PreviewProps) => {
   const { classes } = useStyles();
+
   return (
-    <Grid columns={12} sx={{ marginTop: '12px' }} gutter='xs'>
+    <Grid columns={12} sx={{ marginTop: '12px' }}>
       {images.map((file, i) => {
         const imageUrl = URL.createObjectURL(file);
         return (
-          <Grid.Col span={Math.floor(12 / Math.min(images.length, 3))}>
+          <Grid.Col key={file.name + i} span={4} sx={{ position: 'relative' }}>
+            <CloseButton
+              onClick={() =>
+                setImages((pre) => pre.filter((f) => file.name !== f.name))
+              }
+              className={classes.previewCloseBtn}
+              size={18}
+              variant='filled'
+              color='gray'
+            />
+
             <Image
               radius='sm'
               key={i}
               src={imageUrl}
-              classNames={{
-                root: classes.image,
-                imageWrapper: classes.image,
-                figure: classes.image,
-              }}
-              height='100%'
+              height='148px'
+              width='100%'
               imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
             />
           </Grid.Col>
@@ -127,7 +151,7 @@ export const PostImageUpload = ({
       >
         {() => dropzoneChildren(setShow)}
       </Dropzone>
-      <Preview images={images} />
+      <Preview images={images} setImages={setImages} />
     </>
   );
 };

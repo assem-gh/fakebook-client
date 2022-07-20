@@ -1,9 +1,12 @@
 import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit';
+
+import { postReducer } from './postSlice';
 import { userReducer } from './userSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    posts: postReducer,
   },
   //   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
