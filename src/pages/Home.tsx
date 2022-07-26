@@ -1,6 +1,7 @@
 import { Group } from '@mantine/core';
 
-import { CreatePostBox } from '../components/Feed/CreatePost/CreatePostBox';
+import { CreatePostBox } from '../components/CreatePost/CreatePostBox';
+import { Post } from '../components/Post/Post';
 import { Main } from '../components/Layout/Main';
 
 export const Home = () => {
@@ -18,6 +19,7 @@ export const Home = () => {
         })}
       >
         <CreatePostBox />
+        <Post id='' />
       </Group>
     </Main>
   );

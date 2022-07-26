@@ -1,6 +1,6 @@
 import { Aside, MediaQuery } from '@mantine/core';
 
-import { AsideItem } from './AsideItem';
+import { AsideItem } from './Items/AsideItem';
 
 export const AppAside = () => {
   return (

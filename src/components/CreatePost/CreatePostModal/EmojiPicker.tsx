@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useEffect,
-  useState,
-  MouseEvent,
-} from 'react';
+import { RefObject, useEffect, useState, MouseEvent, Dispatch } from 'react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
@@ -13,6 +6,7 @@ import { useClickOutside } from '@mantine/hooks';
 import Picker, { IEmojiData } from 'emoji-picker-react';
 
 import { TbMoodSmile } from 'react-icons/tb';
+import { ActionType, CreatePostAction } from '../createPostReducer';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -67,14 +61,14 @@ const pickerStyle = {
 
 interface EmojiPickerProps {
   inputRef: RefObject<HTMLTextAreaElement>;
-  setContent: Dispatch<SetStateAction<string>>;
   content: string;
+  dispatch: Dispatch<CreatePostAction>;
 }
 
 export const EmojiPicker = ({
-  content,
-  setContent,
   inputRef,
+  dispatch,
+  content,
 }: EmojiPickerProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [cursorPos, setCursorPos] = useState(0);
@@ -91,7 +85,10 @@ export const EmojiPicker = ({
       const contentBefore = content.substring(0, cursorPos);
       const contentAfter = content.substring(cursorPos);
 
-      setContent(contentBefore + data.emoji + contentAfter);
+      dispatch({
+        type: ActionType.UpdateContent,
+        payload: contentBefore + data.emoji + contentAfter,
+      });
       setCursorPos(cursorPos + data.emoji.length);
     }
   };

@@ -19,7 +19,7 @@ import { TbSearch, TbBell } from 'react-icons/tb';
 
 import logo from '../../assets/images/logo.svg';
 import logoMobile from '../../assets/images/logo-mobile.svg';
-import { UserMenu } from './UserMenu';
+import { UserMenu } from '../Menu/UserMenu';
 
 const useStyles = createStyles((theme) => ({
   header: {

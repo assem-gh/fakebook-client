@@ -7,7 +7,7 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { useState } from 'react';
-import { useAppSelector } from '../../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { CreatePostModal } from './CreatePostModal';
 
 const useStyles = createStyles((theme) => ({

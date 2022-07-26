@@ -1,9 +1,9 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { Post } from './types';
+import { PostType } from './types';
 import postApi from '../api/postApi';
 
-const postsAdapter = createEntityAdapter<Post>({
+const postsAdapter = createEntityAdapter<PostType>({
   selectId: (post) => post.id,
 });
 

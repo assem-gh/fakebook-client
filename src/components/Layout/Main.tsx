@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 
 import { AppShell, Container } from '@mantine/core';
 
-import { AppHeader } from '../Header/Header';
+import { AppHeader } from './Header';
 import { AppNavbar } from './AppNavbar';
 import { AppAside } from './AppAside';
 

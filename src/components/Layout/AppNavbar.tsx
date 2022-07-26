@@ -4,7 +4,7 @@ import { TbHome, TbHeart } from 'react-icons/tb';
 import { BsChatRightDots, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineAddBox } from 'react-icons/md';
 
-import { NavbarItem } from './NavbarItem';
+import { NavbarItem } from './Items/NavbarItem';
 
 const useStyles = createStyles((theme) => ({
   root: {

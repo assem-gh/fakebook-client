@@ -12,7 +12,7 @@ export interface UserState {
   jwtToken: string;
 }
 
-export interface Post {
+export interface PostType {
   id: string;
   content: string;
   images: string[];
