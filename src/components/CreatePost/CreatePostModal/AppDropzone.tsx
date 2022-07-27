@@ -56,7 +56,7 @@ export const dropzoneChildren = (dispatch: Dispatch<CreatePostAction>) => {
       <CloseButton
         onClick={(e) => {
           e.stopPropagation();
-          dispatch({ type: ActionType.CloseDropzone });
+          dispatch({ type: ActionType.ShowDropzone, payload: false });
         }}
         className={classes.closeButton}
       />

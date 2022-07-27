@@ -12,11 +12,19 @@ export interface UserState {
   jwtToken: string;
 }
 
+interface UserShort {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string;
+}
+
 export interface PostType {
   id: string;
   content: string;
   images: string[];
   createdAt: string;
   updatedAt: string;
-  owner: string;
+  owner: UserShort;
 }

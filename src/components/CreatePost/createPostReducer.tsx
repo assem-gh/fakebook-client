@@ -7,15 +7,13 @@ interface State {
 }
 
 export enum ActionType {
-  ToggleDropzone = 'ToggleDropzone',
-  CloseDropzone = 'CloseDropzone',
+  ShowDropzone = 'ShowDropzone',
   AddImageFiles = 'AddImageFiles',
   RemoveImageFile = 'RemoveImageFile',
   AddImageLinks = 'AddImageLinks',
   RemoveImageLink = 'RemoveImageLink',
   UpdateContent = 'UpdateContent',
-  StartLoading = 'StartLoading',
-  StopLoading = 'StopLoading',
+  Loading = 'Loading',
   Reset = 'Reset',
 }
 
@@ -53,26 +51,18 @@ export const createPostReducer = (
         ...state,
         imageLinks: state.imageLinks.filter((link) => link !== action.payload),
       };
-    case ActionType.ToggleDropzone:
+    case ActionType.ShowDropzone:
       return {
         ...state,
-        showDropzone: !state.showDropzone,
+        showDropzone: action.payload || !state.showDropzone,
       };
-    case ActionType.CloseDropzone:
+
+    case ActionType.Loading:
       return {
         ...state,
-        showDropzone: false,
+        loading: action.payload,
       };
-    case ActionType.StartLoading:
-      return {
-        ...state,
-        loading: true,
-      };
-    case ActionType.StopLoading:
-      return {
-        ...state,
-        loading: false,
-      };
+
     case ActionType.Reset:
       return initialState;
     default:

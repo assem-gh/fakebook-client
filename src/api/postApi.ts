@@ -2,18 +2,18 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
-import { Post } from '../store/types';
-import { CreatePostPayload } from './types';
+import { PostType } from '../store/types';
+import { CreatePostPayload, GetAllPayLoad, GetAllResponse } from './types';
 
 const createPost = createAsyncThunk<
-  Post,
+  PostType,
   CreatePostPayload,
   {
     rejectValue: any;
   }
->('user/register', async (payload, thunkApi) => {
+>('post/create', async (payload, thunkApi) => {
   try {
-    const { data } = await api.post<Post>('/posts', payload, {
+    const { data } = await api.post<PostType>('/posts', payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -36,4 +36,24 @@ const createPost = createAsyncThunk<
   }
 });
 
-export default { createPost };
+const getAllPosts = createAsyncThunk<
+  GetAllResponse,
+  GetAllPayLoad,
+  {
+    rejectValue: any;
+  }
+>('posts/getAll', async (payload, thunkApi) => {
+  try {
+    const { data } = await api.get<GetAllResponse>('/posts', {
+      params: { before: payload.before },
+    });
+    return data;
+  } catch (err: any) {
+    showNotification({
+      message: err.message,
+      color: 'red',
+    });
+    return thunkApi.rejectWithValue(err.message);
+  }
+});
+export default { createPost, getAllPosts };

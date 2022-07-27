@@ -16,7 +16,7 @@ export const ModalFooter = ({ dispatch, handleSendPost }: FooterProps) => {
       <Group position='right' sx={{ flexGrow: 1 }}>
         <Tooltip label='Photos'>
           <ActionIcon
-            onClick={() => dispatch({ type: ActionType.ToggleDropzone })}
+            onClick={() => dispatch({ type: ActionType.ShowDropzone })}
             radius='md'
             color='green'
             p={2}

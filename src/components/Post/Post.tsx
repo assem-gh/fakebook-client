@@ -1,7 +1,6 @@
 import {
   Group,
   Text,
-  Image,
   Paper,
   AvatarsGroup,
   Avatar,
@@ -13,34 +12,65 @@ import { PostHeader } from './PostHeader';
 
 import { AiTwotoneLike, AiOutlineLike } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
+import { useAppSelector } from '../../store/hooks';
+import { selectById } from '../../store/postSlice';
+import { EntityId } from '@reduxjs/toolkit';
 
 const useStyles = createStyles((theme) => ({
   postAction: {
     display: 'flex',
     height: '48px',
     borderRadius: 0,
-    flexGrow: 1,
+    width: `calc(50% - ${theme.spacing.md / 2}px)`,
     alignItems: 'center',
     justifyContent: 'center',
     padding: '16px 0px',
     gap: theme.spacing.md,
   },
+  divider: {
+    borderColor:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[4]
+        : theme.colors.gray[2],
+  },
+
+  vertical: {
+    height: '48px',
+    padding: 0,
+  },
 }));
 
 interface PostProps {
-  id: string;
+  id: EntityId;
 }
 
 export const Post = ({ id }: PostProps) => {
+  const post = useAppSelector((state) => selectById(state, id));
+
   const { classes, theme } = useStyles();
   return (
     <Paper shadow='xs' withBorder pt='md' px={0} radius='md'>
-      <PostHeader userName='user name' profileImage='' />
-      <Divider my='sm' />
+      <PostHeader
+        userName={post?.owner.userName!}
+        profileImage={post?.owner.profileImage!}
+        createdAt={post?.createdAt!}
+      />
+      <Divider my='sm' className={classes.divider} />
 
       <Group direction='column' my='lg'>
-        <Text px='lg'> Post content</Text>
-        <Image src='' width='100%' />
+        <Text px='lg'> {post?.content}</Text>
+        <Group direction='column' position='apart' spacing={2} noWrap>
+          {post?.images.map((img, i) => (
+            <img
+              style={{
+                width: '100%',
+                alignSelf: 'flex-start',
+              }}
+              src={img}
+              key={img + i}
+            />
+          ))}
+        </Group>
       </Group>
 
       <Group position='apart' px='lg'>
@@ -53,7 +83,7 @@ export const Post = ({ id }: PostProps) => {
         </Group>
         <Text>0 comments</Text>
       </Group>
-      <Divider mt='sm' />
+      <Divider mt='sm' className={classes.divider} />
       <Group spacing={0}>
         <Button
           variant='subtle'
@@ -63,7 +93,7 @@ export const Post = ({ id }: PostProps) => {
         >
           Like
         </Button>
-        <Divider orientation='vertical' sx={{ height: '48px' }} p={0} />
+        <Divider orientation='vertical' className={classes.vertical} />
         <Button
           color={theme.colorScheme === 'dark' ? 'dark' : 'gray'}
           variant='subtle'

@@ -61,15 +61,15 @@ export const CreatePostModal = ({
 
   const handleSendPost = async () => {
     try {
-      dispatch({ type: ActionType.StartLoading });
+      dispatch({ type: ActionType.Loading, payload: true });
       await reduxDispatch(
         postApi.createPost({ content: state.content, images: state.imageFiles })
       ).unwrap();
       dispatch({ type: ActionType.Reset });
-      dispatch({ type: ActionType.StopLoading });
+      dispatch({ type: ActionType.Loading, payload: false });
       setOpened(false);
     } catch (err: any) {
-      dispatch({ type: ActionType.StopLoading });
+      dispatch({ type: ActionType.Loading, payload: false });
     }
   };
 
