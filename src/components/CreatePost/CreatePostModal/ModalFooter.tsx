@@ -1,4 +1,4 @@
-import { Dispatch, useEffect } from 'react';
+import { Dispatch } from 'react';
 
 import { Group, ActionIcon, Button, Tooltip, Divider } from '@mantine/core';
 import { MdVideoLibrary, MdPhotoLibrary } from 'react-icons/md';
@@ -8,9 +8,14 @@ import { ActionType, CreatePostAction } from '../createPostReducer';
 interface FooterProps {
   dispatch: Dispatch<CreatePostAction>;
   handleSendPost: () => Promise<void>;
+  edit: boolean;
 }
 
-export const ModalFooter = ({ dispatch, handleSendPost }: FooterProps) => {
+export const ModalFooter = ({
+  dispatch,
+  handleSendPost,
+  edit,
+}: FooterProps) => {
   return (
     <Group position='apart'>
       <Group position='right' sx={{ flexGrow: 1 }}>
@@ -31,8 +36,9 @@ export const ModalFooter = ({ dispatch, handleSendPost }: FooterProps) => {
         </Tooltip>
       </Group>
       <Divider orientation='vertical' sx={{ height: '36px' }} />
+
       <Button onClick={handleSendPost} size='sm'>
-        Post
+        {edit ? 'Save' : 'Post'}
       </Button>
     </Group>
   );

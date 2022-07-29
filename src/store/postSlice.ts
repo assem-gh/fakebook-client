@@ -33,6 +33,12 @@ const postSlice = createSlice({
       state.end = action.payload.end;
       state.loading = false;
     });
+    builder.addCase(postApi.likePost.fulfilled, (state, action) => {
+      postsAdapter.setOne(state, action.payload);
+    });
+    builder.addCase(postApi.updatePost.fulfilled, (state, action) => {
+      postsAdapter.setOne(state, action.payload);
+    });
   },
 });
 

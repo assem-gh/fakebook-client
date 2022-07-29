@@ -1,3 +1,4 @@
+import { EntityId } from '@reduxjs/toolkit';
 import { z } from 'zod';
 
 import { loginSchema } from '../components/Login/LoginForm';
@@ -24,6 +25,11 @@ export type ResetPayload = z.infer<typeof resetSchema> & { token: string };
 export interface CreatePostPayload {
   content: string;
   images: File[];
+}
+
+export interface UpdatePostPayload extends CreatePostPayload {
+  links: string[];
+  id: EntityId;
 }
 
 export interface GetAllPayLoad {

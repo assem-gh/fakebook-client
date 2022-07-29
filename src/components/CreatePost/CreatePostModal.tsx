@@ -1,4 +1,6 @@
 import { Dispatch, memo, SetStateAction, useEffect, useReducer } from 'react';
+import { EntityId } from '@reduxjs/toolkit';
+
 import {
   Avatar,
   Group,
@@ -19,6 +21,8 @@ import {
 import { ModalFooter } from './CreatePostModal/ModalFooter';
 import { ImagesPreview } from './CreatePostModal/ImagesPreview';
 import postApi from '../../api/postApi';
+import { selectById } from '../../store/postSlice';
+import { PostType } from '../../store/types';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -35,6 +39,7 @@ const useStyles = createStyles((theme) => ({
 interface CreatePostModalProps {
   opened: boolean;
   setOpened: Dispatch<SetStateAction<boolean>>;
+  id?: EntityId;
 }
 
 const UserAvatar = memo(() => {
@@ -53,18 +58,29 @@ const UserAvatar = memo(() => {
 export const CreatePostModal = ({
   opened,
   setOpened,
+  id,
 }: CreatePostModalProps) => {
   const [state, dispatch] = useReducer(createPostReducer, initialState);
+
+  let post: PostType | undefined;
+  if (id) post = useAppSelector((state) => selectById(state, id));
 
   const reduxDispatch = useAppDispatch();
   const { classes } = useStyles();
 
   const handleSendPost = async () => {
     try {
+      const data = { content: state.content, images: state.imageFiles };
       dispatch({ type: ActionType.Loading, payload: true });
-      await reduxDispatch(
-        postApi.createPost({ content: state.content, images: state.imageFiles })
-      ).unwrap();
+      if (id) {
+        await reduxDispatch(
+          postApi.updatePost({
+            id,
+            links: state.imageLinks,
+            ...data,
+          })
+        );
+      } else await reduxDispatch(postApi.createPost(data)).unwrap();
       dispatch({ type: ActionType.Reset });
       dispatch({ type: ActionType.Loading, payload: false });
       setOpened(false);
@@ -74,10 +90,19 @@ export const CreatePostModal = ({
   };
 
   useEffect(() => {
+    if (id) {
+      dispatch({ type: ActionType.AddImageLinks, payload: post?.images });
+      dispatch({ type: ActionType.UpdateContent, payload: post?.content });
+      dispatch({ type: ActionType.ShowDropzone, payload: true });
+    }
+  }, [id, opened]);
+
+  useEffect(() => {
     if (!opened) {
       dispatch({ type: ActionType.Reset });
     }
   }, [opened]);
+
   return (
     <Modal
       opened={opened}
@@ -99,10 +124,18 @@ export const CreatePostModal = ({
         {state.showDropzone && (
           <>
             <AppDropzone dispatch={dispatch} imageFiles={state.imageFiles} />
-            <ImagesPreview dispatch={dispatch} imageFiles={state.imageFiles} />
+            <ImagesPreview
+              dispatch={dispatch}
+              imageFiles={state.imageFiles}
+              imageLinks={state.imageLinks}
+            />
           </>
         )}
-        <ModalFooter dispatch={dispatch} handleSendPost={handleSendPost} />
+        <ModalFooter
+          dispatch={dispatch}
+          handleSendPost={handleSendPost}
+          edit={Boolean(id)}
+        />
       </Group>
     </Modal>
   );

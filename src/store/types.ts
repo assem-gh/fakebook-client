@@ -12,7 +12,7 @@ export interface UserState {
   jwtToken: string;
 }
 
-interface UserShort {
+export interface UserShort {
   id: string;
   userName: string;
   firstName: string;
@@ -27,4 +27,5 @@ export interface PostType {
   createdAt: string;
   updatedAt: string;
   owner: UserShort;
+  likes?: UserShort[];
 }

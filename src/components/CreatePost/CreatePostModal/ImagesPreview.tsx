@@ -22,21 +22,47 @@ const useStyles = createStyles((theme) => ({
 interface ImagesPreviewProps {
   dispatch: Dispatch<CreatePostAction>;
   imageFiles: File[];
+  imageLinks: string[];
 }
 
-export const ImagesPreview = ({ imageFiles, dispatch }: ImagesPreviewProps) => {
+interface Image {
+  type: 'file' | 'link';
+  url: string;
+  name: string;
+}
+
+export const ImagesPreview = ({
+  imageLinks,
+  imageFiles,
+  dispatch,
+}: ImagesPreviewProps) => {
   const { classes } = useStyles();
 
-  const deleteFile = (name: string) => () => {
-    dispatch({ type: ActionType.RemoveImageFile, payload: name });
+  const deleteFile = (img: Image) => () => {
+    const dispatchType =
+      img.type === 'file'
+        ? ActionType.RemoveImageFile
+        : ActionType.RemoveImageLink;
+    dispatch({ type: dispatchType, payload: img.name });
   };
 
-  const images = imageFiles.map((file, i) => {
-    const imageUrl = URL.createObjectURL(file);
+  const imageFilesUrls: Image[] = imageFiles.map((file) => ({
+    type: 'file',
+    url: URL.createObjectURL(file),
+    name: file.name,
+  }));
+  const imageLinksUrls: Image[] = imageLinks.map((link) => ({
+    type: 'link',
+    url: link,
+    name: link,
+  }));
+
+  const allImages = [...imageLinksUrls, ...imageFilesUrls];
+  const images = allImages.map((img, i) => {
     return (
-      <Grid.Col key={file.name + i} span={4} sx={{ position: 'relative' }}>
+      <Grid.Col key={img.name + i} span={4} sx={{ position: 'relative' }}>
         <CloseButton
-          onClick={deleteFile(file.name)}
+          onClick={deleteFile(img)}
           className={classes.previewCloseBtn}
           size={18}
           variant='filled'
@@ -46,14 +72,17 @@ export const ImagesPreview = ({ imageFiles, dispatch }: ImagesPreviewProps) => {
         <Image
           radius='sm'
           key={i}
-          src={imageUrl}
+          src={img.url}
           height='148px'
           width='100%'
-          imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+          imageProps={{ onLoad: () => URL.revokeObjectURL(img.url) }}
         />
       </Grid.Col>
     );
   });
 
-  return useMemo(() => <Grid columns={12}>{images}</Grid>, [imageFiles]);
+  return useMemo(
+    () => <Grid columns={12}>{images}</Grid>,
+    [imageFiles, imageLinks]
+  );
 };

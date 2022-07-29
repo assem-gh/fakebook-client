@@ -1,16 +1,24 @@
-import axios from 'axios';
-import { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 import { loadState, Storage } from '../utils/localStorage';
 
-const jwtToken = loadState(Storage.Jwt);
-
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    authorization: `Bearer ${jwtToken}`,
-  },
 });
+
+api.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    const jwtToken = loadState(Storage.Jwt);
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers['authorization'] = `Bearer ${jwtToken}`;
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error.response?.data);
+  }
+);
 
 api.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => {

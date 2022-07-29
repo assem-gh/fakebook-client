@@ -29,6 +29,7 @@ export const UserMenu = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const userImage = useAppSelector((state) => state.user.profileImage);
+  const userName = useAppSelector((state) => state.user.userName);
 
   const dispatch = useAppDispatch();
   const { classes } = useStyles();
@@ -55,6 +56,8 @@ export const UserMenu = () => {
         </UnstyledButton>
       }
     >
+      <Menu.Label>{userName}</Menu.Label>
+      <Divider />
       <Menu.Item icon={<TbSettings size={14} />}>Account settings</Menu.Item>
       <Menu.Item
         icon={<TbMoonStars size={14} />}
