@@ -8,13 +8,11 @@ import { selectById } from '../../store/postSlice';
 import { PostBody } from './PostBody';
 import { PostActions } from './PostActions';
 import { CommentsSection } from '../Comment/CommentsSection';
+import { getThemeColor } from '../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   divider: {
-    borderColor:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[4]
-        : theme.colors.gray[2],
+    borderColor: getThemeColor(theme, 4, 2),
   },
 }));
 

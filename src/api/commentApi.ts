@@ -3,7 +3,7 @@ import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
 import { CommentType } from '../store/types';
-import { CreateCommentPayload } from './types';
+import { CreateCommentPayload, DeleteComment } from './types';
 
 const createComment = createAsyncThunk<CommentType, CreateCommentPayload, any>(
   'comment/create',
@@ -24,4 +24,23 @@ const createComment = createAsyncThunk<CommentType, CreateCommentPayload, any>(
   }
 );
 
-export default { createComment };
+const deleteComment = createAsyncThunk<void, DeleteComment, any>(
+  'comments/delete',
+  async ({ commentId }, thunkApi) => {
+    try {
+      await api.delete<void>(`/comments/${commentId}`);
+      showNotification({
+        message: 'Comment Deleted successfully',
+        color: 'green',
+      });
+    } catch (err: any) {
+      showNotification({
+        message: err.message,
+        color: 'red',
+      });
+      return thunkApi.rejectWithValue(err.message);
+    }
+  }
+);
+
+export default { createComment, deleteComment };

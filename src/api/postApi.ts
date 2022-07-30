@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, EntityId } from '@reduxjs/toolkit';
 import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
@@ -99,4 +99,23 @@ const likePost = createAsyncThunk<PostType, string, any>(
   }
 );
 
-export default { createPost, getAllPosts, likePost, updatePost };
+const deletePost = createAsyncThunk<void, EntityId, any>(
+  'posts/delete',
+  async (postId, thunkApi) => {
+    try {
+      await api.delete<void>(`/posts/${postId}`);
+      showNotification({
+        message: 'Post Deleted successfully',
+        color: 'green',
+      });
+    } catch (err: any) {
+      showNotification({
+        message: err.message,
+        color: 'red',
+      });
+      return thunkApi.rejectWithValue(err.message);
+    }
+  }
+);
+
+export default { createPost, getAllPosts, likePost, updatePost, deletePost };

@@ -6,20 +6,23 @@ import {
   Avatar,
   Indicator,
 } from '@mantine/core';
+import { getThemeColor } from '../../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   item: {
     display: 'block',
     width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
+    padding: `${theme.spacing.sm}px ${theme.spacing.xl}px`,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
     '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: getThemeColor(theme, 6, 0),
     },
+  },
+  group: {
+    [theme.fn.smallerThan('md')]: {
+      justifyContent: 'center',
+    },
+    justifyContent: 'space-between',
   },
   itemText: {
     [theme.fn.smallerThan('md')]: {
@@ -38,7 +41,7 @@ export const AsideItem = ({ name, image }: AsideItemProps) => {
   const { classes } = useStyles();
   return (
     <UnstyledButton className={classes.item}>
-      <Group>
+      <Group className={classes.group}>
         <Indicator
           color='green'
           offset={4}

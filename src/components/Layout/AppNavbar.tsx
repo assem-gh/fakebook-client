@@ -5,11 +5,15 @@ import { BsChatRightDots, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineAddBox } from 'react-icons/md';
 
 import { NavbarItem } from './Items/NavbarItem';
+import { getThemeColor } from '../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   root: {
+    width: '100%',
+    border: 'none',
     [theme.fn.smallerThan('xs')]: {
       position: 'fixed',
+      backgroundColor: getThemeColor(theme, 8),
     },
   },
 }));

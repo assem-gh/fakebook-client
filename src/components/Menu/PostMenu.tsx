@@ -3,8 +3,9 @@ import { EntityId } from '@reduxjs/toolkit';
 import { ActionIcon, Menu } from '@mantine/core';
 import { TbDots } from 'react-icons/tb';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { CreatePostModal } from '../CreatePost/CreatePostModal';
+import postApi from '../../api/postApi';
 
 interface Props {
   ownerId: EntityId;
@@ -16,6 +17,12 @@ export const PostMenu = ({ ownerId, postId }: Props) => {
   const userId = useAppSelector((state) => state.user.id);
 
   const isOwner = ownerId === userId;
+
+  const dispatch = useAppDispatch();
+
+  const handleDelete = () => {
+    dispatch(postApi.deletePost(postId));
+  };
 
   return (
     <>
@@ -34,7 +41,10 @@ export const PostMenu = ({ ownerId, postId }: Props) => {
       >
         <Menu.Item>save</Menu.Item>
         {isOwner && (
-          <Menu.Item onClick={() => setOpenEditModal(true)}>Edit</Menu.Item>
+          <>
+            <Menu.Item onClick={() => setOpenEditModal(true)}>Edit</Menu.Item>
+            <Menu.Item onClick={handleDelete}>Delete</Menu.Item>
+          </>
         )}
       </Menu>
       <CreatePostModal

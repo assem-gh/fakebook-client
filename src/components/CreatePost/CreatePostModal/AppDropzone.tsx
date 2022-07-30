@@ -4,13 +4,12 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 import { TbPhoto } from 'react-icons/tb';
 import { ActionType, CreatePostAction } from '../createPostReducer';
+import { getThemeColor } from '../../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   dropZone: {
-    border:
-      theme.colorScheme === 'dark'
-        ? `1px solid ${theme.colors.dark[4]}`
-        : `1px solid ${theme.colors.gray[4]}`,
+    border: getThemeColor(theme, 4, 4),
+    backgroundColor: getThemeColor(theme, 6),
   },
   wrapper: {
     minHeight: 220,
@@ -23,10 +22,7 @@ const useStyles = createStyles((theme) => ({
     right: '8px',
     zIndex: 10,
     '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2],
+      backgroundColor: getThemeColor(theme, 4, 2),
     },
   },
   previewCloseBtn: {
@@ -60,14 +56,7 @@ export const dropzoneChildren = (dispatch: Dispatch<CreatePostAction>) => {
         }}
         className={classes.closeButton}
       />
-      <TbPhoto
-        size={80}
-        color={
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[0]
-            : theme.colors.gray[7]
-        }
-      />
+      <TbPhoto size={80} color={getThemeColor(theme, 0, 7)} />
       <Text size='md'>Drag images here or click to select files</Text>
     </Group>
   );

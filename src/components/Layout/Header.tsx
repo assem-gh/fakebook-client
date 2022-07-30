@@ -12,7 +12,6 @@ import {
   Burger,
   ActionIcon,
   Indicator,
-  Container,
   Center,
 } from '@mantine/core';
 import { TbSearch, TbBell } from 'react-icons/tb';
@@ -41,11 +40,6 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
-  container: {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-
   logoMobile: {
     marginRight: theme.spacing.lg,
     [theme.fn.largerThan('sm')]: {
@@ -73,49 +67,47 @@ export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
 
   return (
     <Header height={56} className={classes.header}>
-      <Container size='xl' className={classes.container}>
-        <div className={classes.inner}>
-          <Group spacing={8}>
-            <MediaQuery largerThan='xs' styles={{ display: 'none' }}>
-              <Burger
-                opened={open}
-                onClick={() => setOpen((pre) => !pre)}
-                size='sm'
-                color={theme.colors.gray[6]}
+      <div className={classes.inner}>
+        <Group spacing={8}>
+          <MediaQuery largerThan='xs' styles={{ display: 'none' }}>
+            <Burger
+              opened={open}
+              onClick={() => setOpen((pre) => !pre)}
+              size='sm'
+              color={theme.colors.gray[6]}
+            />
+          </MediaQuery>
+          <Anchor component={Link} to='/'>
+            <Center>
+              <Image src={logo} width='124px' className={classes.logo} />
+              <Image
+                src={logoMobile}
+                width='36px'
+                className={classes.logoMobile}
               />
-            </MediaQuery>
-            <Anchor component={Link} to='/'>
-              <Center>
-                <Image src={logo} width='124px' className={classes.logo} />
-                <Image
-                  src={logoMobile}
-                  width='36px'
-                  className={classes.logoMobile}
-                />
-              </Center>
-            </Anchor>
+            </Center>
+          </Anchor>
 
-            <Group>
-              <Autocomplete
-                className={classes.search}
-                radius='xl'
-                placeholder='Search'
-                icon={<TbSearch size={16} />}
-                data={[]}
-              />
-            </Group>
+          <Group>
+            <Autocomplete
+              className={classes.search}
+              radius='xl'
+              placeholder='Search'
+              icon={<TbSearch size={16} />}
+              data={[]}
+            />
           </Group>
+        </Group>
 
-          <Group position='apart'>
-            <Indicator inline label='4' offset={2} color='red' size={18}>
-              <ActionIcon variant='transparent'>
-                <TbBell size={24} />
-              </ActionIcon>
-            </Indicator>
-            <UserMenu />
-          </Group>
-        </div>
-      </Container>
+        <Group position='apart'>
+          <Indicator inline label='4' offset={2} color='red' size={18}>
+            <ActionIcon variant='transparent'>
+              <TbBell size={24} />
+            </ActionIcon>
+          </Indicator>
+          <UserMenu />
+        </Group>
+      </div>
     </Header>
   );
 };

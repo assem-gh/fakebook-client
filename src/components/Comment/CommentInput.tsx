@@ -7,7 +7,7 @@ import { useAppDispatch } from '../../store/hooks';
 import commentApi from '../../api/commentApi';
 
 interface Props {
-  postId: EntityId;
+  postId?: EntityId;
 }
 
 export const CommentInput = ({ postId }: Props) => {
@@ -23,6 +23,7 @@ export const CommentInput = ({ postId }: Props) => {
   const onComment = () => {
     try {
       dispatch(commentApi.createComment({ content, postId: postId as string }));
+      setContent('');
     } catch (error) {}
   };
 

@@ -14,6 +14,7 @@ import Picker, { IEmojiData } from 'emoji-picker-react';
 
 import { TbMoodSmile } from 'react-icons/tb';
 import { ActionType, CreatePostAction } from '../createPostReducer';
+import { getThemeColor } from '../../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -27,16 +28,14 @@ const useStyles = createStyles((theme) => ({
   },
   pickerWrapper: {
     '& aside.emoji-picker-react': {
-      background:
-        theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+      background: getThemeColor(theme, 7),
       boxShadow: 'none',
       border:
         theme.colorScheme === 'dark'
           ? '2px solid' + theme.colors.gray[8]
           : '2px solid' + theme.colors.gray[2],
       '& .emoji-group:before': {
-        background:
-          theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+        background: getThemeColor(theme, 7),
       },
       '& .emoji-categories': {
         filter: theme.colorScheme === 'dark' ? 'invert(0.8)' : 'none',
@@ -45,8 +44,8 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: theme.colors.blue[7],
       },
       '& .emoji-search': {
-        background:
-          theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.white,
+        background: getThemeColor(theme, 5),
+
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
         border:
           theme.colorScheme === 'dark'

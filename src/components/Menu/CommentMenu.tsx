@@ -1,22 +1,26 @@
 import { useState } from 'react';
-import { EntityId } from '@reduxjs/toolkit';
 import { ActionIcon, Menu } from '@mantine/core';
 import { TbDots } from 'react-icons/tb';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import commentApi from '../../api/commentApi';
 
 interface Props {
-  ownerId: EntityId;
-  commentId: EntityId;
+  ownerId: string;
+  commentId: string;
+  postId: string;
 }
-export const CommentMenu = ({ ownerId, commentId }: Props) => {
+export const CommentMenu = ({ ownerId, commentId, postId }: Props) => {
   const [opened, setOpened] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const userId = useAppSelector((state) => state.user.id);
 
   const isOwner = ownerId === userId;
+  const dispatch = useAppDispatch();
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    dispatch(commentApi.deleteComment({ commentId, postId }));
+  };
 
   return (
     <>

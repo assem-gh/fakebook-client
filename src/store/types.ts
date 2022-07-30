@@ -37,5 +37,7 @@ export interface CommentType {
   createdAt: string;
   updatedAt: string;
   owner: UserShort;
-  post?: string;
+  post: {
+    id: string;
+  };
 }

@@ -40,8 +40,16 @@ const postSlice = createSlice({
     builder.addCase(postApi.updatePost.fulfilled, (state, action) => {
       postsAdapter.setOne(state, action.payload);
     });
+    builder.addCase(postApi.deletePost.fulfilled, (state, action) => {
+      postsAdapter.removeOne(state, action.meta.arg);
+    });
     builder.addCase(commentApi.createComment.fulfilled, (state, action) => {
-      state.entities[action.payload.post!]?.comments.push(action.payload);
+      state.entities[action.payload.post.id]?.comments.push(action.payload);
+    });
+    builder.addCase(commentApi.deleteComment.fulfilled, (state, action) => {
+      const { postId, commentId } = action.meta.arg;
+      const post = state.entities[postId] as PostType;
+      post.comments = post?.comments.filter((c) => c.id !== commentId);
     });
   },
 });

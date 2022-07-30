@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Group, UnstyledButton, Text, createStyles } from '@mantine/core';
+import { getThemeColor } from '../../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -8,12 +9,8 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
     '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: getThemeColor(theme, 6, 0),
     },
   },
   itemText: {

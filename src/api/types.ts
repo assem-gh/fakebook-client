@@ -47,3 +47,8 @@ export interface CreateCommentPayload {
   content: string;
   postId: string;
 }
+
+export interface DeleteComment {
+  commentId: EntityId;
+  postId: EntityId;
+}

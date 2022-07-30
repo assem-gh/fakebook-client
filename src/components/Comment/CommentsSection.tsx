@@ -17,11 +17,13 @@ export const CommentsSection = ({ id }: Props) => {
     <Group direction='column' grow py='lg' px='md'>
       <CommentInput postId={id} />
 
-      <Group direction='column' grow spacing={2}>
-        {post?.comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
-      </Group>
+      {Boolean(post?.comments?.length) && (
+        <Group direction='column' grow spacing={2}>
+          {post?.comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
+        </Group>
+      )}
     </Group>
   );
 };

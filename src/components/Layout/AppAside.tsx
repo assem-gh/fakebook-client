@@ -5,7 +5,7 @@ import { AsideItem } from './Items/AsideItem';
 export const AppAside = () => {
   return (
     <MediaQuery smallerThan='sm' styles={{ display: 'none' }}>
-      <Aside py='md' width={{ xs: 64, md: 200 }}>
+      <Aside width={{ xs: 64, md: 200 }} sx={{ border: 'none' }}>
         <AsideItem name='Test' />
         <AsideItem name='Test' />
         <AsideItem name='Test' />

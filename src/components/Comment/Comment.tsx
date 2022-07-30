@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { CommentType } from '../../store/types';
+import { getThemeColor } from '../../utils/fns';
 import { CommentMenu } from '../Menu/CommentMenu';
 
 dayjs.extend(relativeTime);
@@ -10,10 +11,7 @@ dayjs.extend(relativeTime);
 const useStyles = createStyles((theme) => ({
   paper: {
     width: '100%',
-    backgroundColor:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[8]
-        : theme.colors.gray[0],
+    backgroundColor: getThemeColor(theme, 8, 0),
   },
 }));
 
@@ -40,7 +38,11 @@ export const Comment = ({ comment }: Props) => {
                 {dayjs(comment.createdAt).fromNow()}
               </Text>
             </Group>
-            <CommentMenu ownerId={comment.owner.id} commentId={comment.id} />
+            <CommentMenu
+              ownerId={comment.owner.id}
+              commentId={comment.id}
+              postId={comment.post.id}
+            />
           </Group>
           <Group>
             <Text>{comment.content}</Text>
