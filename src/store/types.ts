@@ -27,5 +27,15 @@ export interface PostType {
   createdAt: string;
   updatedAt: string;
   owner: UserShort;
+  comments: CommentType[];
   likes?: UserShort[];
+}
+
+export interface CommentType {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: UserShort;
+  post?: string;
 }

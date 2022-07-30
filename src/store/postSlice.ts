@@ -3,6 +3,7 @@ import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { PostType } from './types';
 import postApi from '../api/postApi';
 import { RootState } from './store';
+import commentApi from '../api/commentApi';
 
 const postsAdapter = createEntityAdapter<PostType>({
   selectId: (post) => post.id,
@@ -38,6 +39,9 @@ const postSlice = createSlice({
     });
     builder.addCase(postApi.updatePost.fulfilled, (state, action) => {
       postsAdapter.setOne(state, action.payload);
+    });
+    builder.addCase(commentApi.createComment.fulfilled, (state, action) => {
+      state.entities[action.payload.post!]?.comments.push(action.payload);
     });
   },
 });

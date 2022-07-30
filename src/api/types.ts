@@ -42,3 +42,8 @@ export interface GetAllResponse {
   next: string;
   end: boolean;
 }
+
+export interface CreateCommentPayload {
+  content: string;
+  postId: string;
+}

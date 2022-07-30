@@ -27,15 +27,15 @@ export const PostBody = ({ id }: Props) => {
           ))}
         </Group>
       </Group>
-      <Group position='apart' px='lg'>
+      <Group position='apart' px='lg' sx={{ minHeight: '32px' }}>
         <Group position='left' spacing={8}>
-          <AvatarsGroup size={32} limit={3} total={post?.likes?.length}>
+          <AvatarsGroup size={28} limit={3} total={post?.likes?.length}>
             {post?.likes?.map((u) => (
               <Avatar key={u.id} src={u.profileImage} />
             ))}
           </AvatarsGroup>
         </Group>
-        <Text>0 comments</Text>
+        <Text>{post?.comments.length} comments</Text>
       </Group>
     </>
   );

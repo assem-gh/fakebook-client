@@ -1,4 +1,11 @@
-import { RefObject, useEffect, useState, MouseEvent, Dispatch } from 'react';
+import {
+  RefObject,
+  useEffect,
+  useState,
+  MouseEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
@@ -57,18 +64,21 @@ const pickerStyle = {
   position: 'absolute ',
   top: '42px',
   right: '6px',
+  zIndex: '1',
 };
 
 interface EmojiPickerProps {
   inputRef: RefObject<HTMLTextAreaElement>;
   content: string;
-  dispatch: Dispatch<CreatePostAction>;
+  dispatch?: Dispatch<CreatePostAction>;
+  setContent?: Dispatch<SetStateAction<string>>;
 }
 
 export const EmojiPicker = ({
   inputRef,
   dispatch,
   content,
+  setContent,
 }: EmojiPickerProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [cursorPos, setCursorPos] = useState(0);
@@ -80,15 +90,16 @@ export const EmojiPicker = ({
   const handleEmojiClick = (e: MouseEvent, data: IEmojiData) => {
     if (inputRef.current) {
       inputRef.current.focus();
-
       const cursorPos = inputRef.current.selectionStart;
       const contentBefore = content.substring(0, cursorPos);
       const contentAfter = content.substring(cursorPos);
+      if (dispatch)
+        dispatch({
+          type: ActionType.UpdateContent,
+          payload: contentBefore + data.emoji + contentAfter,
+        });
 
-      dispatch({
-        type: ActionType.UpdateContent,
-        payload: contentBefore + data.emoji + contentAfter,
-      });
+      if (setContent) setContent(contentBefore + data.emoji + contentAfter);
       setCursorPos(cursorPos + data.emoji.length);
     }
   };
