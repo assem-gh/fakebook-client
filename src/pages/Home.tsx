@@ -13,7 +13,10 @@ export const Home = () => {
   const dispatch = useAppDispatch();
 
   const posts = useAppSelector((state) => selectIds(state));
-  const { before, end, loading } = useAppSelector((state) => state.posts);
+
+  const before = useAppSelector((state) => state.posts.before);
+  const end = useAppSelector((state) => state.posts.end);
+  const loading = useAppSelector((state) => state.posts.loading);
 
   const handleReload = () => {
     dispatch(postApi.getAllPosts({ before }));

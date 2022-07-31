@@ -1,29 +1,50 @@
+import { useEffect } from 'react';
 import { EntityId } from '@reduxjs/toolkit';
-import { Group } from '@mantine/core';
+import { Group, LoadingOverlay } from '@mantine/core';
 
-import { useAppSelector } from '../../store/hooks';
-import { selectById } from '../../store/postSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectPostById } from '../../store/postSlice';
 import { Comment } from './Comment';
 
 import { CommentInput } from './CommentInput';
+import commentApi from '../../api/commentApi';
 
 interface Props {
-  id: EntityId;
+  postId: EntityId;
 }
 
-export const CommentsSection = ({ id }: Props) => {
-  const post = useAppSelector((state) => selectById(state, id));
-  return (
-    <Group direction='column' grow py='lg' px='md'>
-      <CommentInput postId={id} />
+export const CommentsSection = ({ postId }: Props) => {
+  const comments = useAppSelector(
+    (state) => selectPostById(state, postId)?.commentsIds
+  );
 
-      {Boolean(post?.comments?.length) && (
-        <Group direction='column' grow spacing={2}>
-          {post?.comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-        </Group>
-      )}
-    </Group>
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(commentApi.getPostComments(postId));
+  }, []);
+
+  const loading = useAppSelector((state) => state.comments.loading);
+
+  return (
+    <>
+      <Group direction='column' grow py='lg' px='md'>
+        <CommentInput postId={postId} />
+
+        {Boolean(comments?.length) && (
+          <Group
+            direction='column'
+            grow
+            spacing={2}
+            sx={{ position: 'relative' }}
+          >
+            <LoadingOverlay visible={loading} />
+            {comments?.map((comment) => (
+              <Comment key={comment} commentId={comment} />
+            ))}
+          </Group>
+        )}
+      </Group>
+    </>
   );
 };

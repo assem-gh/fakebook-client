@@ -32,6 +32,11 @@ export interface UpdatePostPayload extends CreatePostPayload {
   id: EntityId;
 }
 
+export interface SavePost {
+  postId: EntityId;
+  action: 'save' | 'remove';
+}
+
 export interface GetAllPayLoad {
   before?: string;
   take?: number;
@@ -51,4 +56,9 @@ export interface CreateCommentPayload {
 export interface DeleteComment {
   commentId: EntityId;
   postId: EntityId;
+}
+
+export interface UpdateComment {
+  commentId: EntityId;
+  content: string;
 }

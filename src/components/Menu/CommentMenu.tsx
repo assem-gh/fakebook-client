@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { ActionIcon, Menu } from '@mantine/core';
 import { TbDots } from 'react-icons/tb';
 
@@ -6,16 +6,14 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import commentApi from '../../api/commentApi';
 
 interface Props {
-  ownerId: string;
   commentId: string;
   postId: string;
+  setEdit: Dispatch<SetStateAction<boolean>>;
 }
-export const CommentMenu = ({ ownerId, commentId, postId }: Props) => {
-  const [opened, setOpened] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const userId = useAppSelector((state) => state.user.id);
 
-  const isOwner = ownerId === userId;
+export const CommentMenu = ({ commentId, postId, setEdit }: Props) => {
+  const [opened, setOpened] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
@@ -37,12 +35,8 @@ export const CommentMenu = ({ ownerId, commentId, postId }: Props) => {
           </ActionIcon>
         }
       >
-        {isOwner && (
-          <>
-            <Menu.Item onClick={() => setEditMode(true)}>Edit</Menu.Item>
-            <Menu.Item onClick={handleDelete}>Delete</Menu.Item>
-          </>
-        )}
+        <Menu.Item onClick={() => setEdit(true)}>Edit</Menu.Item>
+        <Menu.Item onClick={handleDelete}>Delete</Menu.Item>
       </Menu>
     </>
   );

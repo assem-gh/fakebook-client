@@ -44,12 +44,14 @@ const postSlice = createSlice({
       postsAdapter.removeOne(state, action.meta.arg);
     });
     builder.addCase(commentApi.createComment.fulfilled, (state, action) => {
-      state.entities[action.payload.post.id]?.comments.push(action.payload);
+      state.entities[action.payload.postId]?.commentsIds.push(
+        action.payload.id
+      );
     });
     builder.addCase(commentApi.deleteComment.fulfilled, (state, action) => {
       const { postId, commentId } = action.meta.arg;
       const post = state.entities[postId] as PostType;
-      post.comments = post?.comments.filter((c) => c.id !== commentId);
+      post.commentsIds = post?.commentsIds.filter((c) => c !== commentId);
     });
   },
 });
@@ -58,8 +60,12 @@ const postsSelectors = postsAdapter.getSelectors<RootState>(
   (state) => state.posts
 );
 
-export const { selectById, selectIds, selectEntities, selectTotal } =
-  postsSelectors;
+export const {
+  selectById: selectPostById,
+  selectIds,
+  selectEntities,
+  selectTotal,
+} = postsSelectors;
 
 export const {} = postSlice.actions;
 export const postReducer = postSlice.reducer;

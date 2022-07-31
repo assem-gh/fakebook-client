@@ -1,7 +1,7 @@
 import { EntityId } from '@reduxjs/toolkit';
 import { Avatar, AvatarsGroup, Group, Text } from '@mantine/core';
 
-import { selectById } from '../../store/postSlice';
+import { selectPostById } from '../../store/postSlice';
 import { useAppSelector } from '../../store/hooks';
 
 interface Props {
@@ -9,7 +9,8 @@ interface Props {
 }
 
 export const PostBody = ({ id }: Props) => {
-  const post = useAppSelector((state) => selectById(state, id));
+  const post = useAppSelector((state) => selectPostById(state, id));
+
   return (
     <>
       <Group direction='column' my='lg'>
@@ -35,7 +36,7 @@ export const PostBody = ({ id }: Props) => {
             ))}
           </AvatarsGroup>
         </Group>
-        <Text>{post?.comments.length} comments</Text>
+        <Text>{post?.commentsIds.length} comments</Text>
       </Group>
     </>
   );

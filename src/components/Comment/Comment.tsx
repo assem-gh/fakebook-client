@@ -1,10 +1,16 @@
-import { Avatar, createStyles, Group, Paper, Text } from '@mantine/core';
+import { useState } from 'react';
+import { EntityId } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { CommentType } from '../../store/types';
+import { Avatar, createStyles, Group, Paper, Text } from '@mantine/core';
+
+import { selectCommentById } from '../../store/commentSlice';
+import { useAppSelector } from '../../store/hooks';
+
 import { getThemeColor } from '../../utils/fns';
 import { CommentMenu } from '../Menu/CommentMenu';
+import { CommentInput } from './CommentInput';
 
 dayjs.extend(relativeTime);
 
@@ -16,11 +22,23 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  comment: CommentType;
+  commentId: EntityId;
 }
 
-export const Comment = ({ comment }: Props) => {
+export const Comment = ({ commentId }: Props) => {
+  const [edit, setEdit] = useState(false);
+
+  const comment = useAppSelector((state) =>
+    selectCommentById(state, commentId)
+  );
+
+  const userId = useAppSelector((state) => state.user.id);
+  const isOwner = comment?.owner.id === userId;
+
   const { classes } = useStyles();
+
+  if (!comment) return null;
+
   return (
     <Paper className={classes.paper} px='md' py='sm'>
       <Group spacing={16} sx={{ alignItems: 'flex-start' }}>
@@ -38,14 +56,24 @@ export const Comment = ({ comment }: Props) => {
                 {dayjs(comment.createdAt).fromNow()}
               </Text>
             </Group>
-            <CommentMenu
-              ownerId={comment.owner.id}
-              commentId={comment.id}
-              postId={comment.post.id}
-            />
+            {isOwner && (
+              <CommentMenu
+                commentId={comment.id}
+                postId={comment.postId}
+                setEdit={setEdit}
+              />
+            )}
           </Group>
-          <Group>
-            <Text>{comment.content}</Text>
+          <Group direction='column' grow py='xs' sx={{ width: '100%' }}>
+            {edit ? (
+              <CommentInput
+                commentId={comment.id}
+                commentContent={comment.content}
+                setEdit={setEdit}
+              />
+            ) : (
+              <Text>{comment.content}</Text>
+            )}
           </Group>
         </Group>
       </Group>

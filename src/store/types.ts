@@ -3,8 +3,6 @@ export interface UserState {
   userName: string;
   firstName: string;
   lastName: string;
-  birthday: string;
-  gender: 'male' | 'female' | 'other';
   email: string;
   token: string;
   profileImage: string;
@@ -27,7 +25,7 @@ export interface PostType {
   createdAt: string;
   updatedAt: string;
   owner: UserShort;
-  comments: CommentType[];
+  commentsIds: string[];
   likes?: UserShort[];
 }
 
@@ -37,7 +35,12 @@ export interface CommentType {
   createdAt: string;
   updatedAt: string;
   owner: UserShort;
-  post: {
-    id: string;
-  };
+  postId: string;
+}
+
+export interface Profile {
+  id: string;
+  birthday: string;
+  gender: 'male' | 'female' | 'other';
+  savedPosts: string[];
 }

@@ -7,6 +7,7 @@ import {
   CreatePostPayload,
   GetAllPayLoad,
   GetAllResponse,
+  SavePost,
   UpdatePostPayload,
 } from './types';
 
@@ -83,7 +84,7 @@ const updatePost = createAsyncThunk<PostType, UpdatePostPayload, any>(
   }
 );
 
-const likePost = createAsyncThunk<PostType, string, any>(
+const likePost = createAsyncThunk<PostType, EntityId, any>(
   'posts/like',
   async (postId, thunkApi) => {
     try {
@@ -118,4 +119,32 @@ const deletePost = createAsyncThunk<void, EntityId, any>(
   }
 );
 
-export default { createPost, getAllPosts, likePost, updatePost, deletePost };
+const savePost = createAsyncThunk<string[], SavePost, any>(
+  'posts/save',
+  async ({ postId, action }, thunkApi) => {
+    try {
+      const { data } = await api.post<string[]>(`/posts/${postId}`);
+      showNotification({
+        message: `Post ${action === 'save' ? 'saved' : 'removed'} successfully`,
+        color: 'green',
+      });
+
+      return data;
+    } catch (err: any) {
+      showNotification({
+        message: err.message,
+        color: 'red',
+      });
+      return thunkApi.rejectWithValue(err.message);
+    }
+  }
+);
+
+export default {
+  createPost,
+  getAllPosts,
+  likePost,
+  updatePost,
+  deletePost,
+  savePost,
+};

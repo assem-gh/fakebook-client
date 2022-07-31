@@ -21,8 +21,7 @@ import {
 import { ModalFooter } from './CreatePostModal/ModalFooter';
 import { ImagesPreview } from './CreatePostModal/ImagesPreview';
 import postApi from '../../api/postApi';
-import { selectById } from '../../store/postSlice';
-import { PostType } from '../../store/types';
+import { selectPostById } from '../../store/postSlice';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -62,8 +61,12 @@ export const CreatePostModal = ({
 }: CreatePostModalProps) => {
   const [state, dispatch] = useReducer(createPostReducer, initialState);
 
-  let post: PostType | undefined;
-  if (id) post = useAppSelector((state) => selectById(state, id));
+  let postImages: string[] | undefined;
+  let postContent: string | undefined;
+  if (id) {
+    postImages = useAppSelector((state) => selectPostById(state, id)?.images);
+    postContent = useAppSelector((state) => selectPostById(state, id)?.content);
+  }
 
   const reduxDispatch = useAppDispatch();
   const { classes } = useStyles();
@@ -91,8 +94,8 @@ export const CreatePostModal = ({
 
   useEffect(() => {
     if (id) {
-      dispatch({ type: ActionType.AddImageLinks, payload: post?.images });
-      dispatch({ type: ActionType.UpdateContent, payload: post?.content });
+      dispatch({ type: ActionType.AddImageLinks, payload: postImages });
+      dispatch({ type: ActionType.UpdateContent, payload: postContent });
       dispatch({ type: ActionType.ShowDropzone, payload: true });
     }
   }, [id, opened]);
