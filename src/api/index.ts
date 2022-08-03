@@ -1,14 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-import { loadState, Storage } from '../utils/localStorage';
-
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
 });
 
 api.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const jwtToken = loadState(Storage.Jwt);
+    const jwtToken = localStorage.getItem('jwtToken');
     if (!config.headers) {
       config.headers = {};
     }

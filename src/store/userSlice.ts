@@ -2,27 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { UserState } from './types';
 import userApi from '../api/userApi';
-import { loadState, Storage } from '../utils/localStorage';
 
-const user = loadState(Storage.User);
-const jwtToken = loadState(Storage.Jwt);
+const jwtToken = localStorage.getItem('jwtToken');
 
-const initialState: UserState =
-  jwtToken && user
-    ? { ...user, jwtToken }
-    : {
-        id: '',
-        token: '',
-        email: '',
-        userName: '',
-        firstName: '',
-        lastName: '',
-        profileImage: '',
-        birthday: '',
-        gender: 'male',
-        verified: false,
-        jwtToken: '',
-      };
+const initialState: UserState = {
+  id: '',
+  email: '',
+  userName: '',
+  firstName: '',
+  lastName: '',
+  profileImage: '',
+  verified: false,
+  jwtToken: jwtToken || '',
+  isAuthenticated: false,
+};
 
 const userSlice = createSlice({
   name: 'user',
@@ -39,6 +32,13 @@ const userSlice = createSlice({
     builder.addCase(userApi.signin.fulfilled, (state, action) =>
       Object.assign(state, action.payload)
     );
+    builder.addCase(userApi.authenticateUser.fulfilled, (state, action) => {
+      Object.assign(state, action.payload);
+      state.isAuthenticated = true;
+    });
+    builder.addCase(userApi.authenticateUser.rejected, (state, action) => {
+      return initialState;
+    });
   },
 });
 

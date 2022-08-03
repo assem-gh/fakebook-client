@@ -13,7 +13,6 @@ import {
 import { TbLogout, TbMoonStars, TbSettings, TbTrash } from 'react-icons/tb';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { Storage } from '../../utils/localStorage';
 import { logout } from '../../store/userSlice';
 
 const useStyles = createStyles((theme) => ({
@@ -36,8 +35,7 @@ export const UserMenu = () => {
 
   const onLogout = () => {
     dispatch(logout());
-    localStorage.removeItem(Storage.User);
-    localStorage.removeItem(Storage.Jwt);
+    localStorage.removeItem('jwtToken');
   };
 
   return (

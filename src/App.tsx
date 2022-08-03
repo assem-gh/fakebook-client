@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
@@ -6,12 +7,20 @@ import { useToggle } from '@mantine/hooks';
 
 import { Home } from './pages/Home';
 import { LoginPage } from './pages/LoginPage';
+import userApi from './api/userApi';
+import { useAppDispatch } from './store/hooks';
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<'dark' | 'light'>('dark', [
     'light',
     'dark',
   ]);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(userApi.authenticateUser());
+  }, []);
 
   return (
     <ColorSchemeProvider

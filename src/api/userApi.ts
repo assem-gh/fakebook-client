@@ -9,7 +9,22 @@ import {
   RegisterResponse,
   ResetPayload,
 } from './types';
-import { Storage } from '../utils/localStorage';
+
+const authenticateUser = createAsyncThunk('user/auth', async (_, thunkApi) => {
+  try {
+    const { data } = await api.post<RegisterResponse>('/users/auth');
+
+    localStorage.setItem('jwtToken', data.jwtToken);
+
+    return data;
+  } catch (err: any) {
+    showNotification({
+      message: err.message,
+      color: 'red',
+    });
+    return thunkApi.rejectWithValue(err.message);
+  }
+});
 
 const signup = createAsyncThunk<
   RegisterResponse,
@@ -27,10 +42,7 @@ const signup = createAsyncThunk<
       color: 'green',
     });
 
-    const { jwtToken, ...user } = data;
-
-    localStorage.setItem(Storage.User, JSON.stringify(user));
-    localStorage.setItem(Storage.Jwt, JSON.stringify(jwtToken));
+    localStorage.setItem('jwtToken', data.jwtToken);
 
     return data;
   } catch (err: any) {
@@ -54,10 +66,7 @@ const signin = createAsyncThunk<
       color: 'green',
     });
 
-    const { jwtToken, ...user } = data;
-
-    localStorage.setItem(Storage.User, JSON.stringify(user));
-    localStorage.setItem(Storage.Jwt, JSON.stringify(jwtToken));
+    localStorage.setItem('jwtToken', data.jwtToken);
 
     return data;
   } catch (err: any) {
@@ -112,4 +121,10 @@ export const resetPassword = async (args: ResetPayload) => {
   }
 };
 
-export default { signup, signin, forgotPassword, resetPassword };
+export default {
+  authenticateUser,
+  signup,
+  signin,
+  forgotPassword,
+  resetPassword,
+};

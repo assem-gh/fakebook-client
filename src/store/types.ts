@@ -4,7 +4,7 @@ export interface UserState {
   firstName: string;
   lastName: string;
   email: string;
-  token: string;
+  isAuthenticated: boolean;
   profileImage: string;
   verified: boolean;
   jwtToken: string;
@@ -39,8 +39,11 @@ export interface CommentType {
 }
 
 export interface Profile {
-  id: string;
   birthday: string;
   gender: 'male' | 'female' | 'other';
-  savedPosts: string[];
+  bio: string;
+  savedPosts: PostType[];
+  likedPosts: PostType[];
+  // friendsList: string[];
+  // followingList: string[];
 }
