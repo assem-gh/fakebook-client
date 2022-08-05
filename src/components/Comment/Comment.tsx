@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { Avatar, createStyles, Group, Paper, Text } from '@mantine/core';
 
-import { selectCommentById } from '../../store/commentSlice';
+import { selectCommentById } from '../../store/slices/commentSlice';
 import { useAppSelector } from '../../store/hooks';
 
 import { getThemeColor } from '../../utils/fns';

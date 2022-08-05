@@ -1,13 +1,25 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { PostType } from './types';
-import postApi from '../api/postApi';
-import { RootState } from './store';
-import commentApi from '../api/commentApi';
+import postApi from '../../api/http/postApi';
+import commentApi from '../../api/http/commentApi';
+import { PostType } from '../types';
+import { RootState } from '../store';
 
 const postsAdapter = createEntityAdapter<PostType>({
   selectId: (post) => post.id,
   sortComparer: (a, b) => (a.updatedAt > b.updatedAt ? -1 : 1),
+});
+
+const savedPostsAdapter = createEntityAdapter<PostType>({
+  selectId: (post) => post.id,
+});
+
+const likedPostsAdapter = createEntityAdapter<PostType>({
+  selectId: (post) => post.id,
+});
+
+const ownedPostsAdapter = createEntityAdapter<PostType>({
+  selectId: (post) => post.id,
 });
 
 const postSlice = createSlice({
@@ -16,6 +28,9 @@ const postSlice = createSlice({
     before: new Date().toISOString(),
     end: false,
     loading: false,
+    userSavedPosts: savedPostsAdapter.getInitialState(),
+    userLikedPosts: likedPostsAdapter.getInitialState(),
+    userOwnPosts: ownedPostsAdapter.getInitialState(),
   }),
   reducers: {},
   extraReducers: (builder) => {

@@ -2,8 +2,8 @@ import { createAsyncThunk, EntityId } from '@reduxjs/toolkit';
 import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
-import { CommentType } from '../store/types';
-import { CreateCommentPayload, DeleteComment, UpdateComment } from './types';
+import { CommentType } from '../../store/types';
+import { CreateCommentArgs, DeleteComment, UpdateComment } from './types';
 
 const getPostComments = createAsyncThunk<CommentType[], EntityId, any>(
   'comment/all',
@@ -26,11 +26,11 @@ const getPostComments = createAsyncThunk<CommentType[], EntityId, any>(
   }
 );
 
-const createComment = createAsyncThunk<CommentType, CreateCommentPayload, any>(
+const createComment = createAsyncThunk<CommentType, CreateCommentArgs, any>(
   'comment/create',
-  async (payload, thunkApi) => {
+  async (args, thunkApi) => {
     try {
-      const { data } = await api.post<CommentType>('/comments', payload);
+      const { data } = await api.post<CommentType>('/comments', args);
 
       return data;
     } catch (err: any) {

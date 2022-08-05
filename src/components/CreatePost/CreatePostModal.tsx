@@ -20,8 +20,8 @@ import {
 } from './createPostReducer';
 import { ModalFooter } from './CreatePostModal/ModalFooter';
 import { ImagesPreview } from './CreatePostModal/ImagesPreview';
-import postApi from '../../api/postApi';
-import { selectPostById } from '../../store/postSlice';
+import postApi from '../../api/http/postApi';
+import { selectPostById } from '../../store/slices/postSlice';
 
 const useStyles = createStyles((theme) => ({
   inner: {

@@ -7,9 +7,10 @@ import { BsBookmarkPlus, BsBookmarkDash } from 'react-icons/bs';
 import { MdDeleteOutline } from 'react-icons/md';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/postSlice';
+import { selectPostById } from '../../store/slices/postSlice';
 import { CreatePostModal } from '../CreatePost/CreatePostModal';
-import postApi from '../../api/postApi';
+import postApi from '../../api/http/postApi';
+import { selectSavedPost } from '../../store/slices/profileSlice';
 
 interface Props {
   postId: EntityId;
@@ -22,11 +23,9 @@ export const PostMenu = ({ postId }: Props) => {
     (state) => selectPostById(state, postId)?.owner.id
   );
   const userId = useAppSelector((state) => state.user.id);
-  const savedPosts = useAppSelector((state) => state.profile.savedPosts);
+  const savedByUser = useAppSelector((state) => selectSavedPost(state, postId));
 
   const isOwner = ownerId === userId;
-
-  const isSaved = savedPosts.some((p) => p === postId);
 
   const dispatch = useAppDispatch();
 
@@ -35,7 +34,8 @@ export const PostMenu = ({ postId }: Props) => {
   };
 
   const handleSave = () => {
-    dispatch(postApi.savePost({ postId, action: isSaved ? 'remove' : 'save' }));
+    const action = savedByUser ? 'save' : 'remove';
+    dispatch(postApi.savePost({ postId, action }));
   };
 
   return (
@@ -57,14 +57,14 @@ export const PostMenu = ({ postId }: Props) => {
           <Menu.Item
             onClick={handleSave}
             icon={
-              isSaved ? (
+              savedByUser ? (
                 <BsBookmarkDash size={18} />
               ) : (
                 <BsBookmarkPlus size={18} />
               )
             }
           >
-            {isSaved ? 'Unsave' : 'Save'}
+            {savedByUser ? 'Unsave' : 'Save'}
           </Menu.Item>
         )}
         {isOwner && (

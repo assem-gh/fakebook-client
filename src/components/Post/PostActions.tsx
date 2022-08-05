@@ -5,9 +5,10 @@ import { Button, createStyles, Divider, Group, Text } from '@mantine/core';
 import { AiOutlineLike, AiTwotoneLike } from 'react-icons/ai';
 import { BiComment, BiCommentDots } from 'react-icons/bi';
 
-import postApi from '../../api/postApi';
+import postApi from '../../api/http/postApi';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/postSlice';
+import { selectPostById } from '../../store/slices/postSlice';
+import { selectLikedPost } from '../../store/slices/profileSlice';
 
 const useStyles = createStyles((theme) => ({
   postAction: {
@@ -31,12 +32,7 @@ interface Props {
 }
 
 export const PostActions = ({ postId, setShowComments }: Props) => {
-  const userId = useAppSelector((state) => state.user.id);
-
-  const postLikes = useAppSelector(
-    (state) => selectPostById(state, postId)?.likes
-  );
-  const likedByUser = postLikes?.some((user) => user.id === userId) || false;
+  const likedByUser = useAppSelector((state) => selectLikedPost(state, postId));
 
   const commentsLength = useAppSelector(
     (state) => selectPostById(state, postId)?.commentsIds.length

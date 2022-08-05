@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { UserState } from './types';
-import userApi from '../api/userApi';
+import { UserState } from '../types';
+import userApi from '../../api/http/userApi';
 
 const jwtToken = localStorage.getItem('jwtToken');
 
@@ -26,19 +26,26 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(userApi.signup.fulfilled, (state, action) =>
-      Object.assign(state, action.payload)
+    builder.addCase(
+      userApi.signup.fulfilled,
+      (state, action) =>
+        (state = {
+          ...action.payload.user,
+          isAuthenticated: false,
+        })
     );
-    builder.addCase(userApi.signin.fulfilled, (state, action) =>
-      Object.assign(state, action.payload)
-    );
-    builder.addCase(userApi.authenticateUser.fulfilled, (state, action) => {
-      Object.assign(state, action.payload);
-      state.isAuthenticated = true;
-    });
     builder.addCase(userApi.authenticateUser.rejected, (state, action) => {
       return initialState;
     });
+    builder.addMatcher(
+      isAnyOf(userApi.authenticateUser.fulfilled, userApi.signin.fulfilled),
+      (state, action) => {
+        return (state = {
+          ...action.payload.user,
+          isAuthenticated: true,
+        });
+      }
+    );
   },
 });
 

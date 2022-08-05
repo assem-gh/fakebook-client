@@ -6,8 +6,8 @@ import { CreatePostBox } from '../components/CreatePost/CreatePostBox';
 import { Post } from '../components/Post/Post';
 import { Main } from '../components/Layout/Main';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import postApi from '../api/postApi';
-import { selectIds } from '../store/postSlice';
+import postApi from '../api/http/postApi';
+import { selectIds } from '../store/slices/postSlice';
 
 export const Home = () => {
   const dispatch = useAppDispatch();

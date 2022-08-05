@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { TbArrowLeft } from 'react-icons/tb';
 
-import userApi from '../../api/userApi';
+import userApi from '../../api/http/userApi';
 
 export const resetSchema = z.object({
   newPassword: z.string().min(6),

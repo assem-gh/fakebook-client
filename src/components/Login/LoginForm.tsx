@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
-import userApi from '../../api/userApi';
+import userApi from '../../api/http/userApi';
 import { useAppDispatch } from '../../store/hooks';
 
 export const loginSchema = z.object({

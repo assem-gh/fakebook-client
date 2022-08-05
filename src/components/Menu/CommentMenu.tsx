@@ -3,7 +3,7 @@ import { ActionIcon, Menu } from '@mantine/core';
 import { TbDots } from 'react-icons/tb';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import commentApi from '../../api/commentApi';
+import commentApi from '../../api/http/commentApi';
 
 interface Props {
   commentId: string;

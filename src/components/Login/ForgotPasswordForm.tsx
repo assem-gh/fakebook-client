@@ -14,7 +14,7 @@ import {
 import { useForm, zodResolver } from '@mantine/form';
 import { TbArrowLeft } from 'react-icons/tb';
 
-import userApi from '../../api/userApi';
+import userApi from '../../api/http/userApi';
 
 const useStyles = createStyles((theme) => ({
   title: {

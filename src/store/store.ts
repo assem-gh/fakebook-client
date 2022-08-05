@@ -1,10 +1,10 @@
 import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit';
 
-import { commentReducer } from './commentSlice';
-import { postReducer } from './postSlice';
-import { profileReducer } from './profileSlice';
-import { socketMiddleware } from './socketMiddleware';
-import { userReducer } from './userSlice';
+import { socketMiddleware } from './middleware/socketMiddleware';
+import { commentReducer } from './slices/commentSlice';
+import { postReducer } from './slices/postSlice';
+import { profileReducer } from './slices/profileSlice';
+import { userReducer } from './slices/userSlice';
 
 export const store = configureStore({
   reducer: {

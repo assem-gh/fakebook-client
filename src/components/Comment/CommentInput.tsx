@@ -11,7 +11,7 @@ import { Box, Button, Group, Textarea } from '@mantine/core';
 
 import { EmojiPicker } from '../CreatePost/CreatePostModal/EmojiPicker';
 import { useAppDispatch } from '../../store/hooks';
-import commentApi from '../../api/commentApi';
+import commentApi from '../../api/http/commentApi';
 
 interface Props {
   postId?: EntityId;
@@ -42,15 +42,13 @@ export const CommentInput = ({
 
   const onComment = async () => {
     try {
-      if (editMode) {
-        await dispatch(
-          commentApi.updateComment({ commentId: commentId!, content })
-        ).unwrap();
-        setEdit!(false);
+      if (editMode && setEdit) {
+        dispatch(commentApi.updateComment({ commentId: commentId!, content }));
+        setEdit(false);
       } else {
-        await dispatch(
+        dispatch(
           commentApi.createComment({ content, postId: postId as string })
-        ).unwrap();
+        );
       }
       setContent('');
     } catch (err) {
@@ -106,7 +104,7 @@ export const CommentInput = ({
           </Button>
         )}
         <Button sx={{ width: '92px' }} onClick={onComment}>
-          {editMode ? 'Edit' : 'Send'}{' '}
+          {editMode ? 'Edit' : 'Send'}
         </Button>
       </Group>
     </>

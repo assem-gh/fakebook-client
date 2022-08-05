@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { PostMenu } from '../Menu/PostMenu';
-import { selectPostById } from '../../store/postSlice';
+import { selectPostById } from '../../store/slices/postSlice';
 import { EntityId } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../store/hooks';
 

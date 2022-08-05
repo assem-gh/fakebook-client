@@ -38,12 +38,12 @@ export interface CommentType {
   postId: string;
 }
 
-export interface Profile {
+export interface ProfileState {
   birthday: string;
   gender: 'male' | 'female' | 'other';
   bio: string;
-  savedPosts: PostType[];
-  likedPosts: PostType[];
+  savedPosts: string[];
+  likedPosts: string[];
   // friendsList: string[];
   // followingList: string[];
 }

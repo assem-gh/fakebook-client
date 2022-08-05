@@ -13,7 +13,7 @@ import {
 import { TbLogout, TbMoonStars, TbSettings, TbTrash } from 'react-icons/tb';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { logout } from '../../store/userSlice';
+import { logout } from '../../store/slices/userSlice';
 
 const useStyles = createStyles((theme) => ({
   userMenuBtn: {

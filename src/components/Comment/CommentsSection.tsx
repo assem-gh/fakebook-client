@@ -3,11 +3,11 @@ import { EntityId } from '@reduxjs/toolkit';
 import { Group, LoadingOverlay } from '@mantine/core';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/postSlice';
+import { selectPostById } from '../../store/slices/postSlice';
 import { Comment } from './Comment';
 
 import { CommentInput } from './CommentInput';
-import commentApi from '../../api/commentApi';
+import commentApi from '../../api/http/commentApi';
 
 interface Props {
   postId: EntityId;

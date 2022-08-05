@@ -1,8 +1,8 @@
 import { Middleware } from '@reduxjs/toolkit';
 import { io, Socket } from 'socket.io-client';
 
-import connectionHandler from '../api/socket/handlers/connection';
-import userApi from '../api/userApi';
+import connectionHandler from '../../api/socket/handlers/connection';
+import userApi from '../../api/http/userApi';
 
 let socket: Socket;
 

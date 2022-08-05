@@ -1,8 +1,8 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { CommentType } from './types';
-import { RootState } from './store';
-import commentApi from '../api/commentApi';
+import { CommentType } from '../types';
+import { RootState } from '../store';
+import commentApi from '../../api/http/commentApi';
 
 const commentAdapter = createEntityAdapter<CommentType>({
   selectId: (comment) => comment.id,

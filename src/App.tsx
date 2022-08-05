@@ -7,7 +7,7 @@ import { useToggle } from '@mantine/hooks';
 
 import { Home } from './pages/Home';
 import { LoginPage } from './pages/LoginPage';
-import userApi from './api/userApi';
+import userApi from './api/http/userApi';
 import { useAppDispatch } from './store/hooks';
 
 function App() {

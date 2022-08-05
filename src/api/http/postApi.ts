@@ -2,20 +2,20 @@ import { createAsyncThunk, EntityId } from '@reduxjs/toolkit';
 import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
-import { PostType } from '../store/types';
+import { PostType } from '../../store/types';
 import {
-  CreatePostPayload,
-  GetAllPayLoad,
+  CreatePostArgs,
+  GetAllArgs,
   GetAllResponse,
-  SavePost,
-  UpdatePostPayload,
+  SavePostArgs,
+  UpdatePostArgs,
 } from './types';
 
-const createPost = createAsyncThunk<PostType, CreatePostPayload, any>(
+const createPost = createAsyncThunk<PostType, CreatePostArgs, any>(
   'post/create',
-  async (payload, thunkApi) => {
+  async (args, thunkApi) => {
     try {
-      const { data } = await api.post<PostType>('/posts', payload, {
+      const { data } = await api.post<PostType>('/posts', args, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -39,12 +39,12 @@ const createPost = createAsyncThunk<PostType, CreatePostPayload, any>(
   }
 );
 
-const getAllPosts = createAsyncThunk<GetAllResponse, GetAllPayLoad, any>(
+const getAllPosts = createAsyncThunk<GetAllResponse, GetAllArgs, any>(
   'posts/getAll',
-  async (payload, thunkApi) => {
+  async (args, thunkApi) => {
     try {
       const { data } = await api.get<GetAllResponse>('/posts', {
-        params: { before: payload.before },
+        params: { before: args.before },
       });
       return data;
     } catch (err: any) {
@@ -57,17 +57,13 @@ const getAllPosts = createAsyncThunk<GetAllResponse, GetAllPayLoad, any>(
   }
 );
 
-const updatePost = createAsyncThunk<PostType, UpdatePostPayload, any>(
+const updatePost = createAsyncThunk<PostType, UpdatePostArgs, any>(
   'posts/update',
-  async (payload, thunkApi) => {
+  async (args, thunkApi) => {
     try {
-      const { data } = await api.put<PostType>(
-        `/posts/${payload.id}`,
-        payload,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
-      );
+      const { data } = await api.put<PostType>(`/posts/${args.id}`, args, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
       showNotification({
         message: 'Post updated successfully',
@@ -119,16 +115,11 @@ const deletePost = createAsyncThunk<void, EntityId, any>(
   }
 );
 
-const savePost = createAsyncThunk<string[], SavePost, any>(
+const savePost = createAsyncThunk<string[], SavePostArgs, any>(
   'posts/save',
-  async ({ postId, action }, thunkApi) => {
+  async ({ postId }, thunkApi) => {
     try {
       const { data } = await api.post<string[]>(`/posts/${postId}`);
-      showNotification({
-        message: `Post ${action === 'save' ? 'saved' : 'removed'} successfully`,
-        color: 'green',
-      });
-
       return data;
     } catch (err: any) {
       showNotification({

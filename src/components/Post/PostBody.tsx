@@ -1,7 +1,7 @@
 import { EntityId } from '@reduxjs/toolkit';
 import { Avatar, AvatarsGroup, Group, Text } from '@mantine/core';
 
-import { selectPostById } from '../../store/postSlice';
+import { selectPostById } from '../../store/slices/postSlice';
 import { useAppSelector } from '../../store/hooks';
 
 interface Props {
