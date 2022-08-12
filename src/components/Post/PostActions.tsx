@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 import { EntityId } from '@reduxjs/toolkit';
 
 import { Button, createStyles, Divider, Group, Text } from '@mantine/core';
+
 import { AiOutlineLike, AiTwotoneLike } from 'react-icons/ai';
 import { BiComment, BiCommentDots } from 'react-icons/bi';
 
 import postApi from '../../api/http/postApi';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectPostById } from '../../store/slices/postSlice';
-import { selectLikedPost } from '../../store/slices/profileSlice';
 
 const useStyles = createStyles((theme) => ({
   postAction: {
@@ -32,18 +32,25 @@ interface Props {
 }
 
 export const PostActions = ({ postId, setShowComments }: Props) => {
-  const likedByUser = useAppSelector((state) => selectLikedPost(state, postId));
-
-  const commentsLength = useAppSelector(
-    (state) => selectPostById(state, postId)?.commentsIds.length
+  const likes = useAppSelector((state) => selectPostById(state, postId)?.likes);
+  const commentsIds = useAppSelector(
+    (state) => selectPostById(state, postId)?.commentsIds
   );
-  const hasComments = Boolean(commentsLength);
+  const userId = useAppSelector((state) => state.user.id);
+
+  const likedByUser = useMemo(
+    () => likes?.some((user) => user.id === userId),
+    [likes, userId]
+  );
+
+  const hasComments = Boolean(commentsIds?.length);
 
   const dispatch = useAppDispatch();
   const { classes, theme } = useStyles();
 
   const handleLike = () => {
-    dispatch(postApi.likePost(postId));
+    const action = likedByUser ? 'unlike' : 'like';
+    dispatch(postApi.likePost({ postId, action }));
   };
 
   return (

@@ -7,20 +7,52 @@ import { Post } from '../components/Post/Post';
 import { Main } from '../components/Layout/Main';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import postApi from '../api/http/postApi';
-import { selectIds } from '../store/slices/postSlice';
+import {
+  selectIds,
+  selectLikedPostsIds,
+  selectSavedPostsIds,
+} from '../store/slices/postSlice';
 
-export const Home = () => {
+interface Props {
+  type: 'feed' | 'saved' | 'liked';
+}
+
+const Posts = ({ type }: Props) => {
+  const userId = useAppSelector((state) => state.user.id);
+
+  const selector = {
+    feed: selectIds,
+    saved: selectSavedPostsIds(userId),
+    liked: selectLikedPostsIds(userId),
+  };
+
   const dispatch = useAppDispatch();
-
-  const posts = useAppSelector((state) => selectIds(state));
+  const posts = useAppSelector(selector[type]);
 
   const before = useAppSelector((state) => state.posts.before);
-  const end = useAppSelector((state) => state.posts.end);
+  const hasNext = useAppSelector((state) => state.posts.hasNext);
   const loading = useAppSelector((state) => state.posts.loading);
 
   const handleReload = () => {
     dispatch(postApi.getAllPosts({ before }));
   };
+
+  return (
+    <>
+      {posts?.map((id) => (
+        <Post id={id} key={id} />
+      ))}
+      {hasNext && (
+        <Button loading={loading} variant='outline' onClick={handleReload}>
+          Load more
+        </Button>
+      )}
+    </>
+  );
+};
+
+export const Home = ({ type }: Props) => {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(postApi.getAllPosts({}));
@@ -40,14 +72,7 @@ export const Home = () => {
         })}
       >
         <CreatePostBox />
-        {posts?.map((id) => (
-          <Post id={id} key={id} />
-        ))}
-        {!end && (
-          <Button loading={loading} variant='outline' onClick={handleReload}>
-            Load more
-          </Button>
-        )}
+        <Posts type={type} />
       </Group>
     </Main>
   );

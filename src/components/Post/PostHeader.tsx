@@ -1,10 +1,11 @@
+import { EntityId } from '@reduxjs/toolkit';
+
 import { Avatar, Group, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { PostMenu } from '../Menu/PostMenu';
 import { selectPostById } from '../../store/slices/postSlice';
-import { EntityId } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../store/hooks';
 
 dayjs.extend(relativeTime);
@@ -14,7 +15,10 @@ interface PostHeaderProps {
 }
 
 export const PostHeader = ({ postId }: PostHeaderProps) => {
-  const owner = useAppSelector((state) => selectPostById(state, postId)?.owner);
+  const owner = useAppSelector(
+    (state) => selectPostById(state, postId)?.owner,
+    (a, b) => a?.id === b?.id
+  );
 
   const createdAt = useAppSelector(
     (state) => selectPostById(state, postId)?.createdAt

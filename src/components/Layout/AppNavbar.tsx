@@ -2,7 +2,6 @@ import { createStyles, Navbar } from '@mantine/core';
 
 import { TbHome, TbHeart } from 'react-icons/tb';
 import { BsChatRightDots, BsBookmarkStar } from 'react-icons/bs';
-import { MdOutlineAddBox } from 'react-icons/md';
 
 import { NavbarItem } from './Items/NavbarItem';
 import { getThemeColor } from '../../utils/fns';
@@ -33,11 +32,22 @@ export const AppNavbar = ({ opened }: AppNavbarProps) => {
       classNames={{ root: classes.root }}
     >
       <Navbar.Section>
-        <NavbarItem text='New Post' icon={<MdOutlineAddBox size={18} />} />
-        <NavbarItem text='Home' icon={<TbHome size={18} />} />
-        <NavbarItem text='Chat' icon={<BsChatRightDots size={18} />} />
-        <NavbarItem text='Liked Posts' icon={<TbHeart size={18} />} />
-        <NavbarItem text='Saved Posts' icon={<BsBookmarkStar size={18} />} />
+        <NavbarItem path='/feeds' text='Home' icon={<TbHome size={18} />} />
+        <NavbarItem
+          path='/chat'
+          text='Chat'
+          icon={<BsChatRightDots size={18} />}
+        />
+        <NavbarItem
+          path='/favorite-posts'
+          text='Favorite Posts'
+          icon={<TbHeart size={18} />}
+        />
+        <NavbarItem
+          path='/saved-posts'
+          text='Saved Posts'
+          icon={<BsBookmarkStar size={18} />}
+        />
       </Navbar.Section>
     </Navbar>
   );

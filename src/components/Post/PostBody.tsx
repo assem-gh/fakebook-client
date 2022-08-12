@@ -5,11 +5,11 @@ import { selectPostById } from '../../store/slices/postSlice';
 import { useAppSelector } from '../../store/hooks';
 
 interface Props {
-  id: EntityId;
+  postId: EntityId;
 }
 
-export const PostBody = ({ id }: Props) => {
-  const post = useAppSelector((state) => selectPostById(state, id));
+export const PostBody = ({ postId }: Props) => {
+  const post = useAppSelector((state) => selectPostById(state, postId));
 
   return (
     <>

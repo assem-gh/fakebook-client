@@ -6,7 +6,8 @@ import { PostType } from '../../store/types';
 import {
   CreatePostArgs,
   GetAllArgs,
-  GetAllResponse,
+  GetPostsResponse,
+  LikePostArgs,
   SavePostArgs,
   UpdatePostArgs,
 } from './types';
@@ -39,11 +40,11 @@ const createPost = createAsyncThunk<PostType, CreatePostArgs, any>(
   }
 );
 
-const getAllPosts = createAsyncThunk<GetAllResponse, GetAllArgs, any>(
+const getAllPosts = createAsyncThunk<GetPostsResponse, GetAllArgs, any>(
   'posts/getAll',
   async (args, thunkApi) => {
     try {
-      const { data } = await api.get<GetAllResponse>('/posts', {
+      const { data } = await api.get<GetPostsResponse>('/posts', {
         params: { before: args.before },
       });
       return data;
@@ -80,9 +81,9 @@ const updatePost = createAsyncThunk<PostType, UpdatePostArgs, any>(
   }
 );
 
-const likePost = createAsyncThunk<PostType, EntityId, any>(
+const likePost = createAsyncThunk<PostType, LikePostArgs, any>(
   'posts/like',
-  async (postId, thunkApi) => {
+  async ({ postId }, thunkApi) => {
     try {
       const { data } = await api.patch<PostType>('/posts/' + postId);
       return data;
@@ -115,11 +116,11 @@ const deletePost = createAsyncThunk<void, EntityId, any>(
   }
 );
 
-const savePost = createAsyncThunk<string[], SavePostArgs, any>(
+const savePost = createAsyncThunk(
   'posts/save',
-  async ({ postId }, thunkApi) => {
+  async ({ postId }: SavePostArgs, thunkApi) => {
     try {
-      const { data } = await api.post<string[]>(`/posts/${postId}`);
+      const { data } = await api.post<PostType>(`/posts/${postId}`);
       return data;
     } catch (err: any) {
       showNotification({

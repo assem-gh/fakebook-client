@@ -26,6 +26,7 @@ export interface PostType {
   updatedAt: string;
   owner: UserShort;
   commentsIds: string[];
+  savedBy?: { id: string }[];
   likes?: UserShort[];
 }
 
@@ -42,8 +43,25 @@ export interface ProfileState {
   birthday: string;
   gender: 'male' | 'female' | 'other';
   bio: string;
-  savedPosts: string[];
-  likedPosts: string[];
   // friendsList: string[];
   // followingList: string[];
+}
+
+export enum NotificationLabel {
+  Like = 'Post/like',
+  Comment = 'Post/comment',
+}
+
+export interface NotificationType {
+  id: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+
+  label: NotificationLabel;
+  data: {
+    sender: UserShort;
+    count?: number;
+    relatedEntityId: string;
+  };
 }

@@ -9,6 +9,7 @@ import { Home } from './pages/Home';
 import { LoginPage } from './pages/LoginPage';
 import userApi from './api/http/userApi';
 import { useAppDispatch } from './store/hooks';
+import { NotificationsPage } from './pages/NotificationsPage';
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<'dark' | 'light'>('dark', [
@@ -37,7 +38,10 @@ function App() {
       >
         <NotificationsProvider position='top-center' autoClose={4000}>
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/feeds' element={<Home type='feed' />} />
+            <Route path='/saved-posts' element={<Home type='saved' />} />
+            <Route path='/favorite-posts' element={<Home type='liked' />} />
+            <Route path='/notifications' element={<NotificationsPage />} />
             <Route path='login' element={<LoginPage form='login' />} />
             <Route path='register' element={<LoginPage form='register' />} />
             <Route

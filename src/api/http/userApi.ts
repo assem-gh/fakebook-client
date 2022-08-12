@@ -3,21 +3,17 @@ import { showNotification } from '@mantine/notifications';
 
 import { api } from '.';
 import {
-  GetUserPostsArgs,
-  GetUserPostsResponse,
   LoginArgs,
   LoginResponse,
   RegisterArgs,
   RegisterResponse,
   ResetArgs,
+  AuthenticateResponse,
 } from './types';
-import { PostType } from '../../store/types';
 
 const authenticateUser = createAsyncThunk('user/auth', async (_, thunkApi) => {
   try {
-    const { data } = await api.post<RegisterResponse>('/users/auth');
-    console.log(data);
-
+    const { data } = await api.get<AuthenticateResponse>('/users/auth');
     localStorage.setItem('jwtToken', data.jwtToken);
 
     return data;
@@ -124,31 +120,29 @@ export const resetPassword = async (args: ResetArgs) => {
   }
 };
 
-export const getUserPosts = createAsyncThunk<
-  GetUserPostsResponse,
-  GetUserPostsArgs,
-  any
->('user/posts', async ({ queryType, offset, limit, userId }, thunkApi) => {
-  try {
-    const { data } = await api.get<GetUserPostsResponse>(
-      `/users/${userId}/posts`,
-      {
-        params: {
-          queryType,
-          offset,
-          limit,
-        },
-      }
-    );
-    return data;
-  } catch (err: any) {
-    showNotification({
-      message: err.message,
-      color: 'red',
-    });
-    return thunkApi.rejectWithValue(err.message);
-  }
-});
+// export const getUserPosts = createAsyncThunk<
+//   GetPostsResponse,
+//   GetUserPostsArgs,
+//   { state: RootState }
+// >('user/posts', async ({ queryType, offset, limit }, thunkApi) => {
+//   try {
+//     const userId = thunkApi.getState().user.id;
+//     const { data } = await api.get<GetPostsResponse>(`/users/${userId}/posts`, {
+//       params: {
+//         queryType,
+//         offset,
+//         limit,
+//       },
+//     });
+//     return data;
+//   } catch (err: any) {
+//     showNotification({
+//       message: err.message,
+//       color: 'red',
+//     });
+//     return thunkApi.rejectWithValue(err.message);
+// //   }
+// });
 
 export default {
   authenticateUser,
@@ -156,5 +150,5 @@ export default {
   signin,
   forgotPassword,
   resetPassword,
-  getUserPosts,
+  // getUserPosts,
 };

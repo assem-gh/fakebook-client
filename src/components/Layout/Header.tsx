@@ -10,15 +10,14 @@ import {
   Anchor,
   MediaQuery,
   Burger,
-  ActionIcon,
-  Indicator,
   Center,
 } from '@mantine/core';
-import { TbSearch, TbBell } from 'react-icons/tb';
+import { TbSearch } from 'react-icons/tb';
 
 import logo from '../../assets/images/logo.svg';
 import logoMobile from '../../assets/images/logo-mobile.svg';
 import { UserMenu } from '../Menu/UserMenu';
+import { NotificationsMenu } from '../Menu/NotificationMenu';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -100,11 +99,7 @@ export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
         </Group>
 
         <Group position='apart'>
-          <Indicator inline label='4' offset={2} color='red' size={18}>
-            <ActionIcon variant='transparent'>
-              <TbBell size={24} />
-            </ActionIcon>
-          </Indicator>
+          <NotificationsMenu />
           <UserMenu />
         </Group>
       </div>

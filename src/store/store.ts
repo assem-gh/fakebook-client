@@ -2,6 +2,7 @@ import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit';
 
 import { socketMiddleware } from './middleware/socketMiddleware';
 import { commentReducer } from './slices/commentSlice';
+import { notificationReducer } from './slices/notificationSlice';
 import { postReducer } from './slices/postSlice';
 import { profileReducer } from './slices/profileSlice';
 import { userReducer } from './slices/userSlice';
@@ -12,6 +13,7 @@ export const store = configureStore({
     posts: postReducer,
     comments: commentReducer,
     profile: profileReducer,
+    notifications: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(socketMiddleware),

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Group, UnstyledButton, Text, createStyles } from '@mantine/core';
 import { getThemeColor } from '../../../utils/fns';
@@ -35,13 +36,16 @@ const useStyles = createStyles((theme) => ({
 interface NavbarItemProps {
   text: string;
   icon: ReactNode;
+  path: string;
 }
 
-export const NavbarItem = ({ text, icon }: NavbarItemProps) => {
+export const NavbarItem = ({ text, icon, path }: NavbarItemProps) => {
   const { classes, cx } = useStyles();
   return (
     <UnstyledButton
       className={cx(classes.item, { [classes.active]: text === 'Home' })}
+      component={Link}
+      to={path}
     >
       <Group>
         {icon}

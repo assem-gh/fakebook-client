@@ -1,7 +1,6 @@
-export enum NotificationType {
-  Like = 'Post/like',
-  Comment = 'Post/comment',
-}
+import { EntityId } from '@reduxjs/toolkit';
+
+import { NotificationLabel } from '../../store/types';
 
 export interface NotificationData {
   relatedEntityId: string;
@@ -10,6 +9,12 @@ export interface NotificationData {
     id: string;
     profileImage: string;
     userName: string;
+    firstName: string;
+    lastName: string;
   };
-  message: string;
+}
+
+export interface Data {
+  relatedEntityId: EntityId;
+  label: NotificationLabel;
 }
