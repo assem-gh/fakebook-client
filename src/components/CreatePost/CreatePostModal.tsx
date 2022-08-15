@@ -26,12 +26,11 @@ import { PostType } from '../../store/types';
 
 const useStyles = createStyles((theme) => ({
   inner: {
-    paddingLeft: 0,
-    paddingRight: 0,
-    marginLeft: 0,
-    [theme.fn.largerThan('sm')]: {
-      paddingLeft: theme.spacing.sm,
-      paddingRight: theme.spacing.sm,
+    paddingLeft: theme.spacing.sm,
+    paddingRight: theme.spacing.sm,
+    [theme.fn.smallerThan('sm')]: {
+      paddingLeft: 0,
+      paddingRight: 0,
     },
   },
 }));

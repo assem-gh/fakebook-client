@@ -4,11 +4,15 @@ import { createStyles, Textarea } from '@mantine/core';
 import { useAppSelector } from '../../../store/hooks';
 import { EmojiPicker } from './EmojiPicker';
 import { ActionType, CreatePostAction } from '../createPostReducer';
+import { getThemeColor } from '../../../utils/fns';
 
 const useStyles = createStyles((theme) => ({
   rightSection: {
     alignItems: 'flex-start',
     padding: `8px ${theme.spacing.sm}px`,
+  },
+  input: {
+    backgroundColor: getThemeColor(theme, 4, 1),
   },
 }));
 
@@ -47,7 +51,7 @@ export const CreatePostInput = ({
           inputRef={inputRef}
         />
       }
-      classNames={{ rightSection: classes.rightSection }}
+      classNames={{ rightSection: classes.rightSection, input: classes.input }}
     />
   );
 };

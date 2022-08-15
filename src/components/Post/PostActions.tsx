@@ -43,8 +43,6 @@ export const PostActions = ({ postId, setShowComments }: Props) => {
     [likes, userId]
   );
 
-  const hasComments = Boolean(commentsIds?.length);
-
   const dispatch = useAppDispatch();
   const { classes, theme } = useStyles();
 
@@ -60,7 +58,7 @@ export const PostActions = ({ postId, setShowComments }: Props) => {
         color={theme.colorScheme === 'dark' ? 'dark' : 'gray'}
         leftIcon={
           likedByUser ? (
-            <AiTwotoneLike color={theme.colors.blue[7]} size={22} />
+            <AiTwotoneLike color={theme.colors.indigo[5]} size={22} />
           ) : (
             <AiOutlineLike color='gray' size={22} />
           )
@@ -70,22 +68,16 @@ export const PostActions = ({ postId, setShowComments }: Props) => {
       >
         <Text
           weight='normal'
-          color={likedByUser ? theme.colors.blue[7] : 'inherit'}
+          color={likedByUser ? theme.colors.indigo[5] : 'inherit'}
         >
           Like
         </Text>
       </Button>
-      <Divider orientation='vertical' className={classes.vertical} />
+      {/* <Divider orientation='vertical' className={classes.vertical} /> */}
       <Button
         color={theme.colorScheme === 'dark' ? 'dark' : 'gray'}
         variant='subtle'
-        leftIcon={
-          hasComments ? (
-            <BiCommentDots color='gray' size={22} />
-          ) : (
-            <BiComment color='gray' size={22} />
-          )
-        }
+        leftIcon={<BiComment color='gray' size={22} />}
         className={classes.postAction}
         onClick={() => setShowComments((pre) => !pre)}
       >

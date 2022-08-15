@@ -65,7 +65,7 @@ export const NotificationsMenu = ({}: Props) => {
             </Text>
             <UnstyledButton
               sx={(theme) => ({
-                color: theme.colors.blue[7],
+                color: theme.colors.indigo[5],
                 fontSize: '14px',
               })}
               onClick={handleMarkAll}
@@ -92,7 +92,7 @@ export const NotificationsMenu = ({}: Props) => {
             alignItems: 'center',
             display: 'flex',
             justifyContent: 'center',
-            color: theme.colors.blue[6],
+            color: theme.colors.indigo[5],
           })}
           component={Link}
           to='/notifications'

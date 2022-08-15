@@ -53,6 +53,7 @@ export const PostMenu = ({ postId }: Props) => {
         size={200}
         placement='end'
         transition='pop-top-right'
+        shadow='sm'
         onClose={() => setOpened(false)}
         onOpen={() => setOpened(true)}
         closeOnItemClick={true}

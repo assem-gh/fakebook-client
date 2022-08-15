@@ -41,7 +41,7 @@ const useStyles = createStyles((theme) => ({
         filter: theme.colorScheme === 'dark' ? 'invert(0.8)' : 'none',
       },
       '& .active-category-indicator': {
-        backgroundColor: theme.colors.blue[7],
+        backgroundColor: theme.colors.indigo[5],
       },
       '& .emoji-search': {
         background: getThemeColor(theme, 5),
@@ -53,7 +53,7 @@ const useStyles = createStyles((theme) => ({
             : '1px solid' + theme.colors.gray[4],
       },
       '& .emoji-search:focus': {
-        borderColor: theme.colors.blue[7],
+        borderColor: theme.colors.indigo[5],
       },
     },
   },

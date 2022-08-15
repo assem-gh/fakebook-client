@@ -7,7 +7,6 @@ import { Avatar, createStyles, Group, Paper, Text } from '@mantine/core';
 
 import { selectCommentById } from '../../store/slices/commentSlice';
 import { useAppSelector } from '../../store/hooks';
-
 import { getThemeColor } from '../../utils/fns';
 import { CommentMenu } from '../Menu/CommentMenu';
 import { CommentInput } from './CommentInput';
@@ -17,7 +16,8 @@ dayjs.extend(relativeTime);
 const useStyles = createStyles((theme) => ({
   paper: {
     width: '100%',
-    backgroundColor: getThemeColor(theme, 8, 0),
+    borderColor: getThemeColor(theme, 4, 1),
+    borderWidth: '2px',
   },
 }));
 
@@ -40,7 +40,7 @@ export const Comment = ({ commentId }: Props) => {
   if (!comment) return null;
 
   return (
-    <Paper className={classes.paper} px='md' py='sm'>
+    <Paper className={classes.paper} px='md' py='xs' withBorder>
       <Group spacing={16} sx={{ alignItems: 'flex-start' }}>
         <Avatar
           radius='xl'
@@ -48,9 +48,9 @@ export const Comment = ({ commentId }: Props) => {
           src={comment.owner.profileImage}
           mt='xs'
         />
-        <Group spacing={8} direction='column' sx={{ flexGrow: 1 }}>
+        <Group spacing={0} direction='column' sx={{ flexGrow: 1 }}>
           <Group pt={4} position='apart' sx={{ width: '100%' }}>
-            <Group>
+            <Group spacing='xs'>
               <Text size='sm'>user name</Text>
               <Text size='xs' color='dimmed'>
                 {dayjs(comment.createdAt).fromNow()}

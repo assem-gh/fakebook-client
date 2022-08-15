@@ -48,7 +48,7 @@ export const LoginForm = () => {
 
   return (
     <>
-      <Text size='xl' weight={600} align='center' color='blue'>
+      <Text size='xl' weight={600} align='center' color='indigo'>
         Welcome back
       </Text>
       <Divider labelPosition='center' my='lg' />

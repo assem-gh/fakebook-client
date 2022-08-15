@@ -68,7 +68,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
 
   return (
     <>
-      <Text size='xl' weight={600} align='center' color='blue'>
+      <Text size='xl' weight={600} align='center' color='indigo'>
         Welcome to Fakebook
       </Text>
       <Divider labelPosition='center' my='lg' />

@@ -49,7 +49,7 @@ export const UserMenu = () => {
       control={
         <UnstyledButton className={classes.userMenuBtn}>
           <Group align='center' spacing={4}>
-            <Avatar src={userImage} alt='user Avatar' radius='xl' size={24} />
+            <Avatar src={userImage} alt='user Avatar' radius='xl' size={32} />
           </Group>
         </UnstyledButton>
       }

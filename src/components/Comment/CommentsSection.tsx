@@ -1,10 +1,9 @@
 import { EntityId } from '@reduxjs/toolkit';
-import { Group, LoadingOverlay } from '@mantine/core';
+import { Box, Group, LoadingOverlay } from '@mantine/core';
 
 import { useAppSelector } from '../../store/hooks';
 import { selectPostById } from '../../store/slices/postSlice';
 import { Comment } from './Comment';
-
 import { CommentInput } from './CommentInput';
 
 interface Props {
@@ -21,13 +20,14 @@ export const CommentsSection = ({ postId }: Props) => {
   return (
     <>
       <Group direction='column' grow py='lg' px='md'>
-        <CommentInput postId={postId} />
-
+        <Box>
+          <CommentInput postId={postId} />
+        </Box>
         {Boolean(comments?.length) && (
           <Group
             direction='column'
             grow
-            spacing={2}
+            spacing='xs'
             sx={{ position: 'relative' }}
           >
             <LoadingOverlay visible={loading} />

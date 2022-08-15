@@ -43,7 +43,7 @@ const Posts = ({ type }: Props) => {
         <Post id={id} key={id} />
       ))}
       {hasNext && (
-        <Button loading={loading} variant='outline' onClick={handleReload}>
+        <Button loading={loading} variant='light' onClick={handleReload}>
           Load more
         </Button>
       )}
@@ -60,17 +60,7 @@ export const Home = ({ type }: Props) => {
 
   return (
     <Main>
-      <Group
-        direction='column'
-        grow
-        sx={(theme) => ({
-          width: '100%',
-          margin: 'auto',
-          [theme.fn.largerThan('sm')]: {
-            width: '90%',
-          },
-        })}
-      >
+      <Group direction='column' grow>
         <CreatePostBox />
         <Posts type={type} />
       </Group>

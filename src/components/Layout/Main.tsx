@@ -1,11 +1,23 @@
 import { ReactNode, useState } from 'react';
 
-import { AppShell, Container } from '@mantine/core';
+import { Container, createStyles } from '@mantine/core';
 
 import { AppHeader } from './Header';
-import { AppNavbar } from './AppNavbar';
-import { AppAside } from './AppAside';
-import { getThemeColor } from '../../utils/fns';
+import { LeftSideBar } from './LeftSideBar';
+import { MobileNav } from './MobileNav';
+import { RightSideBar } from './RightSideBar';
+
+const useStyles = createStyles((theme) => ({
+  main: {
+    padding: `36px 112px`,
+    [theme.fn.smallerThan('md')]: {
+      paddingRight: '30px',
+    },
+    [theme.fn.smallerThan('xs')]: {
+      padding: '36px 12px',
+    },
+  },
+}));
 
 interface MainProps {
   children: ReactNode;
@@ -13,28 +25,18 @@ interface MainProps {
 
 export const Main = ({ children }: MainProps) => {
   const [opened, setOpened] = useState(false);
+
+  const { classes } = useStyles();
+
   return (
-    <AppShell
-      navbarOffsetBreakpoint='sm'
-      asideOffsetBreakpoint='sm'
-      navbar={<AppNavbar opened={opened} />}
-      aside={<AppAside />}
-      header={<AppHeader open={opened} setOpen={setOpened} />}
-      styles={(theme) => ({
-        main: {
-          border: `1px solid ${getThemeColor(theme, 5, 3)}`,
-          borderTop: 'none',
-          borderBottom: 'none',
-          backgroundColor: getThemeColor(theme, 8, 0),
-          [theme.fn.smallerThan('sm')]: {
-            minHeight: 'calc(100vh - 56px)',
-          },
-        },
-      })}
-    >
-      <Container size='lg' pb={48}>
+    <>
+      <AppHeader open={opened} setOpen={setOpened} />
+      <MobileNav opened={opened} setOpened={setOpened} />
+      <LeftSideBar />
+      <Container size='md' mx={'auto'} className={classes.main}>
         {children}
       </Container>
-    </AppShell>
+      <RightSideBar />
+    </>
   );
 };

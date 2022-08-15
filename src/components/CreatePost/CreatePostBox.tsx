@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Avatar,
   createStyles,
@@ -6,18 +7,16 @@ import {
   Text,
   UnstyledButton,
 } from '@mantine/core';
-import { useState } from 'react';
+
 import { useAppSelector } from '../../store/hooks';
+import { getThemeColor } from '../../utils/fns';
 import { CreatePostModal } from './CreatePostModal';
 
 const useStyles = createStyles((theme) => ({
   createButton: {
     flexGrow: 1,
     borderRadius: theme.radius.xl,
-    backgroundColor:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[5]
-        : theme.colors.gray[0],
+    backgroundColor: getThemeColor(theme, 4, 1),
     padding: theme.spacing.xs,
   },
 }));
