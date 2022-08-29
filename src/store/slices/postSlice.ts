@@ -1,95 +1,123 @@
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import postApi from '../../api/http/postApi';
 import commentApi from '../../api/http/commentApi';
-import { PostType } from '../types';
-import { RootState } from '../store';
+import { PostState, PostType } from '../types';
+import userApi from '../../api/http/userApi';
+import { logout } from './userSlice';
 
-const postsAdapter = createEntityAdapter<PostType>({
-  selectId: (post) => post.id,
-  sortComparer: (a, b) => (a.updatedAt > b.updatedAt ? -1 : 1),
-});
+const sortIds = (ids: string[], posts: { [key: string]: PostType }) => {
+  return ids.sort((a, b) => (posts[a].createdAt > posts[b].createdAt ? -1 : 1));
+};
+
+const initialState: PostState = {
+  entities: {},
+  next: {
+    feeds: new Date().toISOString(),
+    liked: 0,
+    owned: 0,
+    saved: 0,
+  },
+  hasNext: {
+    feeds: true,
+    liked: true,
+    owned: true,
+    saved: false,
+  },
+  feeds: [],
+  saved: [],
+  liked: [],
+  owned: [],
+};
 
 const postSlice = createSlice({
   name: 'post',
-  initialState: postsAdapter.getInitialState({
-    before: new Date().toISOString(),
-    hasNext: false,
-    loading: false,
-  }),
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(postApi.createPost.fulfilled, (state, action) => {
-      postsAdapter.addOne(state, action.payload);
+    builder.addCase(logout, (state, action) => {
+      return initialState;
     });
-    builder.addCase(postApi.getAllPosts.pending, (state) => {
-      state.loading = true;
+
+    builder.addCase(postApi.createPost.fulfilled, (state, action) => {});
+
+    builder.addCase(postApi.getPosts.fulfilled, (state, action) => {
+      const { group } = action.meta.arg;
+
+      const ids = action.payload.posts.map((post) => post.id);
+      for (const post of action.payload.posts) {
+        state.entities[post.id] = post;
+      }
+
+      state[group] = sortIds([...state[group], ...ids], state.entities);
+
+      if (group !== 'saved') {
+        state.hasNext[group] = action.payload.hasNext;
+        group === 'feeds'
+          ? (state.next[group] = action.payload.next)
+          : (state.next[group] = parseInt(action.payload.next)) || -1;
+      }
     });
-    builder.addCase(postApi.getAllPosts.rejected, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(postApi.getAllPosts.fulfilled, (state, action) => {
-      postsAdapter.addMany(state, action.payload.posts);
-      state.before = action.payload.next;
-      state.hasNext = action.payload.hasNext;
-      state.loading = false;
-    });
+
     builder.addCase(postApi.likePost.fulfilled, (state, action) => {
-      postsAdapter.setOne(state, action.payload);
+      const { postId, action: likeAction } = action.meta.arg;
+      state.entities[postId] = action.payload;
+      state.liked =
+        likeAction === 'like'
+          ? sortIds([...state.liked, postId as string], state.entities)
+          : state.liked.filter((id) => id !== postId);
     });
+
     builder.addCase(postApi.updatePost.fulfilled, (state, action) => {
-      postsAdapter.setOne(state, action.payload);
+      const updatedPost = action.payload;
+      state.entities[updatedPost.id] = updatedPost;
     });
+
     builder.addCase(postApi.deletePost.fulfilled, (state, action) => {
-      postsAdapter.removeOne(state, action.meta.arg);
+      const deletedPostId = action.meta.arg;
+      delete state.entities[deletedPostId];
+      state.feeds = state.feeds.filter((id) => id !== deletedPostId);
+      state.owned = state.owned.filter((id) => id !== deletedPostId);
+      state.liked = state.liked.filter((id) => id !== deletedPostId);
     });
+
     builder.addCase(postApi.savePost.fulfilled, (state, action) => {
-      postsAdapter.setOne(state, action.payload);
+      const { action: saveAction, postId } = action.meta.arg;
+      state.saved =
+        saveAction === 'save'
+          ? sortIds([...state.saved, postId as string], state.entities)
+          : state.saved.filter((id) => id !== postId);
     });
+
     builder.addCase(commentApi.createComment.fulfilled, (state, action) => {
       state.entities[action.payload.postId]?.commentsIds.push(
         action.payload.id
       );
     });
+
     builder.addCase(commentApi.deleteComment.fulfilled, (state, action) => {
       const { postId, commentId } = action.meta.arg;
-      const post = state.entities[postId] as PostType;
-      post.commentsIds = post?.commentsIds.filter((c) => c !== commentId);
+      const post = state.entities[postId];
+      post.commentsIds = post?.commentsIds.filter((id) => id !== commentId);
     });
+
+    builder.addMatcher(
+      isAnyOf(userApi.authenticateUser.fulfilled, userApi.signin.fulfilled),
+      (state, action) => {
+        const { feeds, savedPostsIds } = action.payload;
+        const feedsIds = feeds.posts.map((post) => post.id);
+
+        for (const post of action.payload.feeds.posts) {
+          state.entities[post.id] = post;
+        }
+        state.saved = savedPostsIds;
+        state.feeds = feedsIds;
+        state.next.feeds = feeds.next;
+        state.hasNext.feeds = feeds.hasNext;
+      }
+    );
   },
 });
-
-const postsSelectors = postsAdapter.getSelectors<RootState>(
-  (state) => state.posts
-);
-
-export const {
-  selectById: selectPostById,
-  selectIds,
-  selectEntities,
-  selectTotal,
-  selectAll,
-} = postsSelectors;
-
-export const selectSavedPostsIds = (userId: string) =>
-  createSelector(
-    selectAll,
-
-    (posts) =>
-      posts.flatMap((post) =>
-        post.savedBy?.some((u) => u.id === userId) ? post.id : []
-      )
-  );
-export const selectLikedPostsIds = (userId: string) =>
-  createSelector(selectAll, (posts) =>
-    posts.flatMap((post) =>
-      post.likes?.some((likedBy) => likedBy.id === userId) ? post.id : []
-    )
-  );
 
 export const {} = postSlice.actions;
 export const postReducer = postSlice.reducer;

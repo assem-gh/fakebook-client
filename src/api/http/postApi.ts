@@ -5,7 +5,7 @@ import { api } from '.';
 import { PostType } from '../../store/types';
 import {
   CreatePostArgs,
-  GetAllArgs,
+  GetPostsArgs,
   GetPostsResponse,
   LikePostArgs,
   SavePostArgs,
@@ -40,12 +40,12 @@ const createPost = createAsyncThunk<PostType, CreatePostArgs, any>(
   }
 );
 
-const getAllPosts = createAsyncThunk<GetPostsResponse, GetAllArgs, any>(
+const getPosts = createAsyncThunk<GetPostsResponse, GetPostsArgs, any>(
   'posts/getAll',
   async (args, thunkApi) => {
     try {
       const { data } = await api.get<GetPostsResponse>('/posts', {
-        params: { before: args.before },
+        params: args,
       });
       return data;
     } catch (err: any) {
@@ -134,7 +134,7 @@ const savePost = createAsyncThunk(
 
 export default {
   createPost,
-  getAllPosts,
+  getPosts,
   likePost,
   updatePost,
   deletePost,

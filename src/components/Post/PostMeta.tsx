@@ -1,23 +1,53 @@
-import { EntityId } from '@reduxjs/toolkit';
+import { useMemo } from 'react';
 
-import { Avatar, AvatarsGroup, Group, Text } from '@mantine/core';
+import {
+  ActionIcon,
+  Avatar,
+  AvatarsGroup,
+  Group,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import { BiComment } from 'react-icons/bi';
 
-import { selectPostById } from '../../store/slices/postSlice';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { AiOutlineLike, AiTwotoneLike } from 'react-icons/ai';
+import postApi from '../../api/http/postApi';
+import { useNavigate } from 'react-router-dom';
+import commentApi from '../../api/http/commentApi';
 
 interface Props {
-  postId: EntityId;
+  postId: string;
 }
 
 export const PostMeta = ({ postId }: Props) => {
+  const userId = useAppSelector((state) => state.user.id);
   const postLikes = useAppSelector(
-    (state) => selectPostById(state, postId)?.likes
+    (state) => state.posts.entities[postId].likes
+  );
+
+  const likedByUser = useMemo(
+    () => postLikes?.some((user) => user.id === userId),
+    [postLikes, userId]
   );
 
   const commentsCount = useAppSelector(
-    (state) => selectPostById(state, postId)?.commentsIds
+    (state) => state.posts.entities[postId].commentsIds
   )?.length;
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const theme = useMantineTheme();
+
+  const handleLike = () => {
+    const action = likedByUser ? 'unlike' : 'like';
+    dispatch(postApi.likePost({ postId, action }));
+  };
+
+  const handleOpenComments = () => {
+    navigate('/posts/' + postId);
+    dispatch(commentApi.getPostComments(postId));
+  };
 
   return (
     <Group position='apart' px='lg' sx={{ minHeight: '32px', width: '100%' }}>
@@ -30,8 +60,25 @@ export const PostMeta = ({ postId }: Props) => {
       </Group>
       <Group>
         <Group spacing={6} position='center'>
-          <Text size='sm'>{commentsCount} </Text>
-          <BiComment size={18} />
+          <Text
+            size='md'
+            color={likedByUser ? theme.colors.indigo[5] : 'inherit'}
+          >
+            {postLikes?.length}
+          </Text>
+          <ActionIcon variant='transparent' onClick={handleLike}>
+            {likedByUser ? (
+              <AiTwotoneLike color={theme.colors.indigo[5]} size={22} />
+            ) : (
+              <AiOutlineLike size={22} />
+            )}
+          </ActionIcon>
+        </Group>
+        <Group spacing={6} position='center' onClick={handleOpenComments}>
+          <Text size='md'>{commentsCount} </Text>
+          <ActionIcon variant='transparent'>
+            <BiComment size={22} />
+          </ActionIcon>
         </Group>
       </Group>
     </Group>

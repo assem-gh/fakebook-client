@@ -1,24 +1,28 @@
-import { EntityId } from '@reduxjs/toolkit';
 import { Group, Text } from '@mantine/core';
 
-import { selectPostById } from '../../store/slices/postSlice';
 import { useAppSelector } from '../../store/hooks';
 import { PostMeta } from './PostMeta';
 import { PostImages } from './PostImages';
+import { ImagesSlider } from './ImagesSlider';
 
 interface Props {
-  postId: EntityId;
+  postId: string;
+  postPage: boolean;
 }
 
-export const PostBody = ({ postId }: Props) => {
+export const PostBody = ({ postId, postPage }: Props) => {
   const content = useAppSelector(
-    (state) => selectPostById(state, postId)?.content
+    (state) => state.posts.entities[postId].content
   );
 
   return (
     <Group direction='column' spacing={16}>
       <Text px='lg'>{content}</Text>
-      <PostImages postId={postId} />
+      {postPage ? (
+        <ImagesSlider postId={postId} />
+      ) : (
+        <PostImages postId={postId} />
+      )}
       <PostMeta postId={postId} />
     </Group>
   );

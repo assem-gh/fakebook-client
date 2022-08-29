@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 import { Button, Group } from '@mantine/core';
 
@@ -7,39 +7,39 @@ import { Post } from '../components/Post/Post';
 import { Main } from '../components/Layout/Main';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import postApi from '../api/http/postApi';
-import {
-  selectIds,
-  selectLikedPostsIds,
-  selectSavedPostsIds,
-} from '../store/slices/postSlice';
+import { GetPostsArgs, PostGroup } from '../api/http/types';
 
 interface Props {
-  type: 'feed' | 'saved' | 'liked';
+  group: PostGroup;
 }
 
-const Posts = ({ type }: Props) => {
-  const userId = useAppSelector((state) => state.user.id);
+const Posts = ({ group }: Props) => {
+  const [loading, setLoading] = useState(false);
 
-  const selector = {
-    feed: selectIds,
-    saved: selectSavedPostsIds(userId),
-    liked: selectLikedPostsIds(userId),
+  const postsIds = useAppSelector((state) => state.posts[group]);
+  let hasNext = useAppSelector((state) => state.posts.hasNext[group]);
+  const next = useAppSelector((state) => state.posts.next[group]);
+
+  const params: GetPostsArgs = {
+    group,
+    [group === 'feeds' ? 'before' : 'offset']: next,
   };
 
   const dispatch = useAppDispatch();
-  const posts = useAppSelector(selector[type]);
 
-  const before = useAppSelector((state) => state.posts.before);
-  const hasNext = useAppSelector((state) => state.posts.hasNext);
-  const loading = useAppSelector((state) => state.posts.loading);
-
-  const handleReload = () => {
-    dispatch(postApi.getAllPosts({ before }));
+  const handleReload = async () => {
+    try {
+      setLoading(true);
+      await dispatch(postApi.getPosts(params)).unwrap();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      {posts?.map((id) => (
+      {postsIds?.map((id) => (
         <Post id={id} key={id} />
       ))}
       {hasNext && (
@@ -51,18 +51,12 @@ const Posts = ({ type }: Props) => {
   );
 };
 
-export const Home = ({ type }: Props) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(postApi.getAllPosts({}));
-  }, []);
-
+export const Home = ({ group }: Props) => {
   return (
     <Main>
       <Group direction='column' grow>
-        <CreatePostBox />
-        <Posts type={type} />
+        {group === 'feeds' && <CreatePostBox />}
+        <Posts group={group} />
       </Group>
     </Main>
   );

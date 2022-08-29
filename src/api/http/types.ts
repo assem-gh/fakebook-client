@@ -29,6 +29,12 @@ export type ResetArgs = z.infer<typeof resetSchema> & { token: string };
 
 export interface AuthenticateResponse extends RegisterResponse {
   notifications: NotificationType[];
+  savedPostsIds: string[];
+  feeds: {
+    posts: PostType[];
+    hasNext: boolean;
+    next: string;
+  };
 }
 
 export interface CreatePostArgs {
@@ -51,9 +57,13 @@ export interface LikePostArgs {
   action: 'like' | 'unlike';
 }
 
-export interface GetAllArgs {
+export type PostGroup = 'feeds' | 'saved' | 'liked' | 'owned';
+
+export interface GetPostsArgs {
   before?: string;
   take?: number;
+  offset?: number;
+  group: PostGroup;
 }
 
 export interface GetPostsResponse {

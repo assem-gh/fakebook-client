@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
@@ -8,16 +8,21 @@ import { useToggle } from '@mantine/hooks';
 import { Home } from './pages/Home';
 import { LoginPage } from './pages/LoginPage';
 import userApi from './api/http/userApi';
-import { useAppDispatch } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { BackToTop } from './components/BackToTop';
 import { Profile } from './pages/Profile';
-import { TimeLine } from './components/Profile/TimeLine';
-import { About } from './components/Profile/About';
-import { ProfileFriendsList } from './components/Profile/ProfileFriendsList';
+import { TimeLineSection } from './components/Profile/TimeLineSection';
+import { AboutSection } from './components/Profile/AboutSection';
+import { FriendsSection } from './components/Profile/FriendsSection';
 import { GlobalStyles } from './GlobalStyles';
 import { AppStyles, AppTheme } from './AppTheme';
 import { PostPage } from './pages/PostPage';
+
+const AuthRoutes = () => {
+  const token = useAppSelector((state) => state.user.jwtToken);
+  return token ? <Outlet /> : <Navigate to='accounts/login' />;
+};
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<'dark' | 'light'>('dark', [
@@ -25,10 +30,14 @@ function App() {
     'dark',
   ]);
 
+  const token = useAppSelector((state) => state.user.jwtToken);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(userApi.authenticateUser());
+    if (token) {
+      dispatch(userApi.authenticateUser(navigate));
+    }
   }, []);
 
   return (
@@ -44,27 +53,43 @@ function App() {
         <GlobalStyles />
         <NotificationsProvider position='top-center' autoClose={4000}>
           <Routes>
-            <Route path='feeds' element={<Home type='feed' />} />
-            <Route path='saved-posts' element={<Home type='saved' />} />
-            <Route path='favorite-posts' element={<Home type='liked' />} />
-            <Route path='posts/:postId' element={<PostPage />} />
-            <Route path='notifications' element={<NotificationsPage />} />
-            <Route path=':userName/profile' element={<Profile />}>
-              <Route index element={<Navigate to='about' />} />
-              <Route path='about' element={<About />} />
-              <Route path='timeline' element={<TimeLine />} />
-              <Route path='friends' element={<ProfileFriendsList />} />
+            <Route path='/accounts'>
+              <Route path='login' element={<LoginPage form='login' />} />
+              <Route path='register' element={<LoginPage form='register' />} />
+              <Route
+                path='forgot-password'
+                element={<LoginPage form='forgot' />}
+              />
+              <Route
+                path='reset-password/:token'
+                element={<LoginPage form='reset' />}
+              />
             </Route>
-            <Route path='login' element={<LoginPage form='login' />} />
-            <Route path='register' element={<LoginPage form='register' />} />
-            <Route
-              path='forgot-password'
-              element={<LoginPage form='forgot' />}
-            />
-            <Route
-              path='reset-password/:token'
-              element={<LoginPage form='reset' />}
-            />
+
+            <Route path='/' element={<AuthRoutes />}>
+              <Route index element={<Navigate to='posts/newsfeed' />} />
+              <Route path='/posts'>
+                <Route index element={<Navigate to='posts/newsfeed' />} />
+                <Route path='newsfeed' element={<Home group='feeds' />} />
+                <Route path='saved' element={<Home group='saved' />} />
+                <Route path='favorites' element={<Home group='liked' />} />
+                <Route path=':postId' element={<PostPage />} />
+              </Route>
+
+              <Route path='/notifications' element={<NotificationsPage />} />
+
+              <Route
+                path=':username/photos/'
+                element={<div>Photos page</div>}
+              />
+
+              <Route path='/:userName/profile' element={<Profile />}>
+                <Route index element={<Navigate to='about' />} />
+                <Route path='about' element={<AboutSection />} />
+                <Route path='timeline' element={<TimeLineSection />} />
+                <Route path='friends' element={<FriendsSection />} />
+              </Route>
+            </Route>
           </Routes>
           <BackToTop />
         </NotificationsProvider>

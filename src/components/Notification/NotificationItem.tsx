@@ -75,8 +75,8 @@ export const NotificationItem = ({ id }: Props) => {
             color: getThemeColor(theme, 1, 8),
           })}
         >
-          {`${sender.firstName} ${sender.lastName}`}
-          {formatMessage(notification.label, count)}
+          {`${sender.firstName} ${sender.lastName}` +
+            formatMessage(notification.label, count)}
         </Anchor>
       </Group>
     </MenuItem>

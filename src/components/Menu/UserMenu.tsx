@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Group,
@@ -24,18 +25,20 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const UserMenu = () => {
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const [, setUserMenuOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const userImage = useAppSelector((state) => state.user.profileImage);
   const userName = useAppSelector((state) => state.user.userName);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { classes } = useStyles();
 
   const onLogout = () => {
     dispatch(logout());
     localStorage.removeItem('jwtToken');
+    navigate('/accounts/login');
   };
 
   return (

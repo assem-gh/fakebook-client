@@ -15,7 +15,7 @@ import commentApi from '../../api/http/commentApi';
 import { getThemeColor } from '../../utils/fns';
 
 interface Props {
-  postId?: EntityId;
+  postId?: string;
   commentId?: EntityId;
   commentContent?: string;
   setEdit?: Dispatch<SetStateAction<boolean>>;
@@ -46,10 +46,8 @@ export const CommentInput = ({
       if (editMode && setEdit) {
         dispatch(commentApi.updateComment({ commentId: commentId!, content }));
         setEdit(false);
-      } else {
-        dispatch(
-          commentApi.createComment({ content, postId: postId as string })
-        );
+      } else if (postId) {
+        dispatch(commentApi.createComment({ content, postId: postId }));
       }
       setContent('');
     } catch (err) {

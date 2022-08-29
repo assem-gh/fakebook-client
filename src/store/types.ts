@@ -1,3 +1,5 @@
+import { PostGroup } from '../api/http/types';
+
 export interface UserState {
   id: string;
   userName: string;
@@ -28,6 +30,21 @@ export interface PostType {
   commentsIds: string[];
   savedBy?: { id: string }[];
   likes?: UserShort[];
+}
+
+export interface PostState {
+  entities: { [key: string]: PostType };
+  next: {
+    feeds: string;
+    liked: number;
+    owned: number;
+    saved: number;
+  };
+  hasNext: Record<PostGroup, boolean>;
+  feeds: string[];
+  liked: string[];
+  saved: string[];
+  owned: string[];
 }
 
 export interface CommentType {

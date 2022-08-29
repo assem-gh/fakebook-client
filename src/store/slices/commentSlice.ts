@@ -3,20 +3,26 @@ import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { CommentType } from '../types';
 import { RootState } from '../store';
 import commentApi from '../../api/http/commentApi';
+import { logout } from './userSlice';
 
 const commentAdapter = createEntityAdapter<CommentType>({
   selectId: (comment) => comment.id,
   sortComparer: (a, b) => (a.createdAt > b.createdAt ? -1 : 1),
 });
 
+const initialState = commentAdapter.getInitialState({
+  loading: false,
+});
+
 const commentSlice = createSlice({
   name: 'comment',
-  initialState: commentAdapter.getInitialState({
-    loading: false,
-  }),
+  initialState,
   reducers: {},
 
   extraReducers(builder) {
+    builder.addCase(logout, (state, action) => {
+      return initialState;
+    });
     builder.addCase(commentApi.getPostComments.pending, (state, action) => {
       state.loading = true;
     });

@@ -15,6 +15,16 @@ const useStyles = createStyles((theme, right: boolean) => ({
     top: 84,
     borderRadius: theme.radius.md,
     zIndex: 99,
+    scrollbarColor: getThemeColor(theme),
+    '&::-webkit-scrollbar': {
+      width: '3px',
+    },
+    '&:hover': {
+      '&::-webkit-scrollbar-thumb ': {
+        backgroundColor: getThemeColor(theme, 3, 5),
+        borderRadius: theme.radius.md,
+      },
+    },
     [theme.fn.smallerThan('xs')]: {
       display: 'none',
     },
@@ -22,8 +32,8 @@ const useStyles = createStyles((theme, right: boolean) => ({
       display: right ? 'none' : '',
     },
   },
-  left: { left: 12 },
-  right: { right: 12 },
+  left: { left: 16 },
+  right: { right: 16 },
 }));
 
 interface Props {

@@ -1,18 +1,16 @@
-import { EntityId } from '@reduxjs/toolkit';
 import { Box, Group, LoadingOverlay } from '@mantine/core';
 
 import { useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/slices/postSlice';
 import { Comment } from './Comment';
 import { CommentInput } from './CommentInput';
 
 interface Props {
-  postId: EntityId;
+  postId: string;
 }
 
 export const CommentsSection = ({ postId }: Props) => {
-  const comments = useAppSelector(
-    (state) => selectPostById(state, postId)?.commentsIds
+  const commentsIds = useAppSelector(
+    (state) => state.posts.entities[postId].commentsIds
   );
 
   const loading = useAppSelector((state) => state.comments.loading);
@@ -23,7 +21,7 @@ export const CommentsSection = ({ postId }: Props) => {
         <Box>
           <CommentInput postId={postId} />
         </Box>
-        {Boolean(comments?.length) && (
+        {Boolean(commentsIds?.length) && (
           <Group
             direction='column'
             grow
@@ -31,7 +29,7 @@ export const CommentsSection = ({ postId }: Props) => {
             sx={{ position: 'relative' }}
           >
             <LoadingOverlay visible={loading} />
-            {comments?.map((comment) => (
+            {commentsIds?.map((comment) => (
               <Comment key={comment} commentId={comment} />
             ))}
           </Group>

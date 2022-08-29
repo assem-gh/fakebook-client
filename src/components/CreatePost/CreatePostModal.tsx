@@ -21,7 +21,6 @@ import {
 import { ModalFooter } from './CreatePostModal/ModalFooter';
 import { ImagesPreview } from './CreatePostModal/ImagesPreview';
 import postApi from '../../api/http/postApi';
-import { selectPostById } from '../../store/slices/postSlice';
 import { PostType } from '../../store/types';
 
 const useStyles = createStyles((theme) => ({
@@ -64,7 +63,7 @@ export const CreatePostModal = ({
   let post: PostType | undefined;
 
   if (id) {
-    post = useAppSelector((state) => selectPostById(state, id));
+    post = useAppSelector((state) => state.posts.entities[id]);
   }
   const reduxDispatch = useAppDispatch();
   const { classes } = useStyles();

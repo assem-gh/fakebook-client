@@ -1,57 +1,48 @@
 import {
-  ActionIcon,
   Avatar,
   Box,
-  Button,
-  Card,
   createStyles,
   Group,
+  Indicator,
+  Paper,
   Text,
 } from '@mantine/core';
-
-import { TbPencil } from 'react-icons/tb';
 
 import { useAppSelector } from '../../../store/hooks';
 import { getThemeColor } from '../../../utils/fns';
 import { ProfileMeta } from './ProfileMeta';
 
 const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: getThemeColor(theme, 7),
-    borderRadius: '0',
+  paper: {
+    position: 'relative',
   },
   coverImage: {
     height: 240,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     position: 'relative',
+    borderTopLeftRadius: theme.radius.md,
+    borderTopRightRadius: theme.radius.md,
   },
 
-  avatar: {
-    border: `2px solid ${getThemeColor(theme, 7)}`,
-
-    marginTop: '-60px',
-    [theme.fn.smallerThan('md')]: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+  avatarContainer: {
+    backgroundColor: getThemeColor(theme, 8, 0),
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: theme.shadows.lg,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
   },
   wrapper: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: '16px',
-    paddingTop: '16px',
-    [theme.fn.smallerThan('md')]: {
-      flexDirection: 'column',
-      gap: '12px',
-    },
-  },
-  edit: {
-    position: 'absolute',
-    bottom: '12px',
-    right: '12px',
-    // display: 'none',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    height: 148,
   },
 }));
 
@@ -62,46 +53,41 @@ const bgImage =
 
 export const ProfileHeader = ({}: Props) => {
   const user = useAppSelector((state) => state.user);
+  const isConnected = false;
 
   const { classes } = useStyles();
 
   return (
-    <Card withBorder p='xl' pb='sm' className={classes.card}>
-      <Card.Section
+    <Paper shadow='xs' px={0} radius='md' className={classes.paper}>
+      <Box
         sx={{ backgroundImage: `url(${bgImage})` }}
         className={classes.coverImage}
-      >
-        <ActionIcon variant='transparent' className={classes.edit}>
-          <TbPencil color='white' size={48} />
-        </ActionIcon>
-      </Card.Section>
+      ></Box>
+
       <div className={classes.wrapper}>
-        <Box sx={{ position: 'relative' }}>
-          <Avatar
-            src={user.profileImage}
-            size={120}
-            radius={120}
-            className={classes.avatar}
-          />
-          <ActionIcon variant='transparent' className={classes.edit}>
-            <TbPencil color='gray' size={48} />
-          </ActionIcon>
+        <Box className={classes.avatarContainer} p={2}>
+          <Indicator
+            inline
+            size={20}
+            offset={14}
+            position='bottom-end'
+            color={isConnected ? 'green' : 'gray'}
+            withBorder
+          >
+            <Avatar src={user.profileImage} size={120} radius={120} />
+          </Indicator>
         </Box>
 
-        <Group direction='column' spacing={0}>
-          <Text align='center' size='xl' weight={700}>
+        <Group direction='column' position='center' spacing={0} mt={24} mb={8}>
+          <Text align='center' size='xl' weight={700} mb={-4}>
             {`${user.firstName} ${user.lastName}`}
           </Text>
           <Text align='center' size='sm' color='dimmed'>
-            location - city
+            City - Country
           </Text>
-          <Group spacing={8}>
-            <Button>Follow</Button>
-            <Button variant='outline'>Friend</Button>
-          </Group>
         </Group>
         <ProfileMeta />
       </div>
-    </Card>
+    </Paper>
   );
 };

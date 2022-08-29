@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { EntityId } from '@reduxjs/toolkit';
+import { useState } from 'react';
 
 import { ActionIcon, Menu } from '@mantine/core';
 
@@ -8,30 +7,24 @@ import { BsBookmarkPlus, BsBookmarkDash } from 'react-icons/bs';
 import { MdDeleteOutline } from 'react-icons/md';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/slices/postSlice';
 import { CreatePostModal } from '../CreatePost/CreatePostModal';
 import postApi from '../../api/http/postApi';
 
 interface Props {
-  postId: EntityId;
+  postId: string;
 }
 export const PostMenu = ({ postId }: Props) => {
   const [opened, setOpened] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const savedBy = useAppSelector(
-    (state) => selectPostById(state, postId)?.savedBy
-  );
-
   const ownerId = useAppSelector(
-    (state) => selectPostById(state, postId)?.owner.id
+    (state) => state.posts.entities[postId].owner.id
   );
 
   const userId = useAppSelector((state) => state.user.id);
 
-  const savedByUser = useMemo(
-    () => savedBy?.some((u) => u.id === userId),
-    [savedBy, postId]
+  const savedByUser = useAppSelector((state) => state.posts.saved).includes(
+    postId
   );
 
   const isOwner = ownerId === userId;
@@ -43,7 +36,7 @@ export const PostMenu = ({ postId }: Props) => {
   };
 
   const handleSave = () => {
-    const action = savedByUser ? 'save' : 'remove';
+    const action = savedByUser ? 'remove' : 'save';
     dispatch(postApi.savePost({ postId, action }));
   };
 

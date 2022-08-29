@@ -13,6 +13,8 @@ import {
 
 import { getThemeColor } from '../../utils/fns';
 import { SideBar } from './SideBar';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import postApi from '../../api/http/postApi';
 
 const useStyles = createStyles((theme) => ({
   tooltip: {
@@ -47,19 +49,46 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const items = [
-  { path: '/feeds', icon: TbNews, label: 'Newsfeed' },
-  { path: '/profile', icon: TbUser, label: 'Profile' },
-  { path: '/chat', icon: TbMessage, label: 'Chat' },
-  { path: '/notifications', icon: TbBell, label: 'Notifications' },
-  { path: '/favorite-posts', icon: TbStar, label: 'Favorites Post' },
-  { path: '/saved-posts', icon: TbBookmark, label: 'Saved Posts' },
-  { path: '/photos', icon: TbPhoto, label: 'Photos' },
+export const navigationOptions = [
+  { path: () => '/posts/newsfeed', icon: TbNews, label: 'Newsfeed' },
+  {
+    path: (userName?: string) => `/${userName}/profile`,
+    icon: TbUser,
+    label: 'Profile',
+  },
+  { path: () => '/chat', icon: TbMessage, label: 'Chat' },
+  { path: () => '/notifications', icon: TbBell, label: 'Notifications' },
+  {
+    path: () => '/posts/favorites',
+    icon: TbStar,
+    label: 'Favorites Post',
+  },
+  {
+    path: () => '/posts/saved',
+    icon: TbBookmark,
+    label: 'Saved Posts',
+  },
+  {
+    path: (userName?: string) => `/${userName}/photos/`,
+    icon: TbPhoto,
+    label: 'Photos',
+  },
 ];
 
 export const LeftSideBar = () => {
-  const { classes, theme, cx } = useStyles();
   const { pathname } = useLocation();
+
+  const userName = useAppSelector((state) => state.user.userName);
+  const likedPostsOffset = useAppSelector((state) => state.posts.next.liked);
+
+  const dispatch = useAppDispatch();
+  const { classes, theme, cx } = useStyles();
+
+  const handleClick = (label: string) => () => {
+    if (label === 'Favorites Post' && likedPostsOffset === 0) {
+      dispatch(postApi.getPosts({ group: 'liked' }));
+    }
+  };
 
   return (
     <SideBar position='left'>
@@ -73,7 +102,11 @@ export const LeftSideBar = () => {
         mb='lg'
       />
 
-      {items.map((item, i) => {
+      {navigationOptions.map((item, i) => {
+        const path = ['Photos', 'Profile'].includes(item.label)
+          ? item.path(userName)
+          : item.path();
+
         const Icon = item.icon;
         return (
           <Tooltip
@@ -84,9 +117,10 @@ export const LeftSideBar = () => {
           >
             <Anchor
               component={Link}
-              to={item.path}
+              onClick={handleClick(item.label)}
+              to={path}
               className={cx(classes.item, {
-                [classes.active]: pathname.includes(item.path),
+                [classes.active]: pathname.includes(path),
               })}
             >
               <Icon size={28} strokeWidth={1} />

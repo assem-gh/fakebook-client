@@ -40,7 +40,7 @@ export const LoginForm = () => {
       setLoading(true);
       await dispatch(userApi.signin(values)).unwrap();
       setLoading(false);
-      navigate('/');
+      navigate('/posts/newsfeed');
     } catch (err) {
       setLoading(false);
     }

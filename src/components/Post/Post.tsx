@@ -5,7 +5,6 @@ import { Paper, Divider, createStyles } from '@mantine/core';
 
 import { PostHeader } from './PostHeader';
 import { PostBody } from './PostBody';
-import { PostActions } from './PostActions';
 import { CommentsSection } from '../Comment/CommentsSection';
 import { getThemeColor } from '../../utils/fns';
 import commentApi from '../../api/http/commentApi';
@@ -18,32 +17,19 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface PostProps {
-  id: EntityId;
+  id: string;
+  postPage?: boolean;
 }
 
-export const Post = ({ id }: PostProps) => {
-  const [showComments, setShowComments] = useState(false);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(commentApi.getPostComments(id));
-  }, []);
-
+export const Post = ({ id, postPage = false }: PostProps) => {
   const { classes } = useStyles();
   return (
     <Paper shadow='xs' withBorder pt='md' px={0} radius='md'>
       <PostHeader postId={id} />
       <Divider my='sm' className={classes.divider} />
-      <PostBody postId={id} />
-      <Divider mt='sm' className={classes.divider} />
-      <PostActions postId={id} setShowComments={setShowComments} />
-      {showComments && (
-        <>
-          <Divider className={classes.divider} />
-          <CommentsSection postId={id} />
-        </>
-      )}
+      <PostBody postId={id} postPage={postPage} />
+      <Divider mt={8} className={classes.divider} />
+      {postPage && <CommentsSection postId={id} />}
     </Paper>
   );
 };

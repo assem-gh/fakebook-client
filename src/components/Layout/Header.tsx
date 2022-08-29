@@ -28,6 +28,7 @@ const useStyles = createStyles((theme) => ({
     top: 0,
     left: 0,
     border: 'none',
+    zIndex: 9,
     boxShadow: theme.shadows.sm,
     [theme.fn.smallerThan('xs')]: {
       paddingLeft: theme.spacing.xs,
@@ -63,12 +64,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface AppHeaderProps {
-  open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
-  const { classes, theme } = useStyles();
+export const AppHeader = ({ setOpen }: AppHeaderProps) => {
+  const { classes } = useStyles();
 
   return (
     <Header height={56} className={classes.header}>
@@ -91,7 +91,6 @@ export const AppHeader = ({ open, setOpen }: AppHeaderProps) => {
           </MediaQuery>
           <Group>
             <Autocomplete
-              // className={classes.search}
               classNames={{
                 input: classes.search,
               }}

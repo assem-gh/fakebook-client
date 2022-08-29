@@ -26,23 +26,20 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      userApi.signup.fulfilled,
-      (state, action) =>
-        (state = {
-          ...action.payload.user,
-          isAuthenticated: false,
-        })
-    );
     builder.addCase(userApi.authenticateUser.rejected, (state, action) => {
       return initialState;
     });
     builder.addMatcher(
-      isAnyOf(userApi.authenticateUser.fulfilled, userApi.signin.fulfilled),
+      isAnyOf(
+        userApi.authenticateUser.fulfilled,
+        userApi.signin.fulfilled,
+        userApi.signup.fulfilled
+      ),
       (state, action) => {
         return (state = {
           ...action.payload.user,
           isAuthenticated: true,
+          jwtToken: action.payload.jwtToken,
         });
       }
     );
