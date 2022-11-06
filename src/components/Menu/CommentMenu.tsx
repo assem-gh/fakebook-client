@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { ActionIcon, Menu } from '@mantine/core';
 import { TbDots } from 'react-icons/tb';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch } from '../../store/hooks';
 import commentApi from '../../api/http/commentApi';
 
 interface Props {
@@ -26,6 +26,7 @@ export const CommentMenu = ({ commentId, postId, setEdit }: Props) => {
         size={180}
         placement='end'
         transition='pop-top-right'
+        opened={opened}
         onClose={() => setOpened(false)}
         onOpen={() => setOpened(true)}
         closeOnItemClick={true}

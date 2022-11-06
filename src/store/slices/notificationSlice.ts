@@ -44,9 +44,7 @@ const notificationSlice = createSlice({
 });
 
 export const {
-  selectIds: selectNotificationsIds,
   selectById: selectNotificationById,
-  selectEntities: selectNotificationEntities,
   selectAll,
 } = notificationAdapter.getSelectors((state: RootState) => state.notifications);
 

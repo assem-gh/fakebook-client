@@ -1,10 +1,10 @@
-import { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import {  Dispatch } from '@reduxjs/toolkit';
 import { Socket } from 'socket.io-client';
 
 import { addNotification } from '../../../store/slices/notificationSlice';
 import { NotificationType } from '../../../store/types';
 
-const onReceive = (socket: Socket, dispatch: Dispatch<AnyAction>) => {
+const onReceive = (socket: Socket, dispatch: Dispatch) => {
   socket.on('notification/receive', (data: NotificationType) => {
     console.log('[Socket]: new Notification =>', data);
 

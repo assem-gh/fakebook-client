@@ -4,26 +4,20 @@ import { z } from 'zod';
 import { loginSchema } from '../../components/Login/LoginForm';
 import { registerSchema } from '../../components/Login/RegisterForm';
 import { resetSchema } from '../../components/Login/ResetPasswordForm';
-import { NotificationType, PostType, UserState } from '../../store/types';
+import {NotificationType, PostType, ProfileType,  UserType} from '../../store/types';
 
 type RegisterSchema = z.infer<typeof registerSchema>;
 export type RegisterArgs = Omit<RegisterSchema, 'birthday'> & {
   birthday: string;
 };
 
-interface GetInitialUserPosts {
-  savedPostsIds: string[];
-  likedPostsIds: string[];
-}
 
 export interface RegisterResponse {
-  user: UserState;
+  user: UserType ;
   jwtToken: string;
 }
 
 export type LoginArgs = z.infer<typeof loginSchema>;
-
-export type LoginResponse = RegisterResponse;
 
 export type ResetArgs = z.infer<typeof resetSchema> & { token: string };
 
@@ -86,9 +80,27 @@ export interface UpdateComment {
   commentId: EntityId;
   content: string;
 }
+export interface UpdateProfile {
+  profileId: string;
+  firstName:string,
+  lastName:string,
+  email:string,
+  country:string,
+  birthday: string,
+  gender:'male'|'female'|'other',
+  bio:string,
 
-export interface GetUserPostsArgs {
-  queryType: 'saved' | 'liked' | 'owned' | 'initial';
-  offset?: number;
-  limit?: number;
+}
+export interface UpdateProfileResponse extends ProfileType{
+user:{
+  id:string,
+  email:string,
+  userName:string
+}
+
+}
+export interface  UpdateImageArgs{
+  image:FormData;
+  profileId:string;
+  imageType:string
 }

@@ -26,6 +26,11 @@ export const AppStyles = {
       backgroundColor: getThemeColor(theme, 4),
     },
   }),
+  Textarea: (theme: MantineTheme) => ({
+    input: {
+      backgroundColor: getThemeColor(theme, 4),
+    },
+  }),
   PasswordInput: (theme: MantineTheme) => ({
     input: {
       backgroundColor: getThemeColor(theme, 4),

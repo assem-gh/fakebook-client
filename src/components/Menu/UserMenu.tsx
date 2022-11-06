@@ -28,7 +28,7 @@ export const UserMenu = () => {
   const [, setUserMenuOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  const userImage = useAppSelector((state) => state.user.profileImage);
+  const userImage = useAppSelector((state) => state.profile.profileImage);
   const userName = useAppSelector((state) => state.user.userName);
 
   const dispatch = useAppDispatch();

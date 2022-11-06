@@ -41,9 +41,11 @@ interface CreatePostModalProps {
 }
 
 const UserAvatar = memo(() => {
-  const profileImage = useAppSelector((state) => state.user.profileImage);
-  const firstName = useAppSelector((state) => state.user.firstName);
-  const lastName = useAppSelector((state) => state.user.lastName);
+  const profileImage = useAppSelector(
+    (state) => state.profile.profileImage
+  );
+  const firstName = useAppSelector((state) => state.profile.firstName);
+  const lastName = useAppSelector((state) => state.profile.lastName);
 
   return (
     <Group spacing={8}>
@@ -60,11 +62,8 @@ export const CreatePostModal = ({
 }: CreatePostModalProps) => {
   const [state, dispatch] = useReducer(createPostReducer, initialState);
 
-  let post: PostType | undefined;
+  const post: PostType | undefined = useAppSelector((state) =>id? state.posts.entities[id]:undefined);
 
-  if (id) {
-    post = useAppSelector((state) => state.posts.entities[id]);
-  }
   const reduxDispatch = useAppDispatch();
   const { classes } = useStyles();
 
@@ -81,6 +80,7 @@ export const CreatePostModal = ({
           })
         );
       } else await reduxDispatch(postApi.createPost(data)).unwrap();
+
       dispatch({ type: ActionType.Reset });
       dispatch({ type: ActionType.Loading, payload: false });
       setOpened(false);

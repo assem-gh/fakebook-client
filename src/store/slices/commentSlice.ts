@@ -20,17 +20,17 @@ const commentSlice = createSlice({
   reducers: {},
 
   extraReducers(builder) {
-    builder.addCase(logout, (state, action) => {
+    builder.addCase(logout, () => {
       return initialState;
     });
-    builder.addCase(commentApi.getPostComments.pending, (state, action) => {
+    builder.addCase(commentApi.getPostComments.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(commentApi.getPostComments.fulfilled, (state, action) => {
       commentAdapter.addMany(state, action.payload);
       state.loading = false;
     });
-    builder.addCase(commentApi.getPostComments.rejected, (state, action) => {
+    builder.addCase(commentApi.getPostComments.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(commentApi.createComment.fulfilled, (state, action) => {
@@ -51,10 +51,6 @@ const commentSelectors = commentAdapter.getSelectors<RootState>(
 
 export const {
   selectById: selectCommentById,
-  selectIds,
-  selectEntities,
-  selectTotal,
 } = commentSelectors;
 
-export const {} = commentSlice.actions;
 export const commentReducer = commentSlice.reducer;

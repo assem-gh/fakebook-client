@@ -9,7 +9,7 @@ import {
   RegisterArgs,
   RegisterResponse,
   ResetArgs,
-  AuthenticateResponse,
+  AuthenticateResponse, UpdateProfile, UpdateProfileResponse, UpdateImageArgs,
 } from './types';
 
 const authenticateUser = createAsyncThunk(
@@ -130,10 +130,58 @@ export const resetPassword = async (args: ResetArgs) => {
   }
 };
 
+const updateProfile = createAsyncThunk(
+  'profile/update',
+  async (args:UpdateProfile, thunkApi) => {
+    try {
+      const { data } = await api.put<UpdateProfileResponse>(`/users/profile/${args.profileId}`, args,);
+      showNotification({
+        message: 'Profile successfully updated ',
+        color: 'green',
+      });
+
+      return data;
+    } catch (err: any) {
+      showNotification({
+        message: err.message,
+        color: 'red',
+      });
+      return thunkApi.rejectWithValue(err.message);
+    }
+  }
+);
+
+const updateProfileImages = createAsyncThunk(
+    'profile/cover/update',
+    async (args:UpdateImageArgs, thunkApi) => {
+      try {
+        const { data } = await api.post(`/users/profile/${args.profileId}/images?type=${args.imageType}`, args.image, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        showNotification({
+          message: 'Profile successfully updated ',
+          color: 'green',
+        });
+
+        return data;
+      } catch (err: any) {
+        showNotification({
+          message: err.message,
+          color: 'red',
+        });
+        return thunkApi.rejectWithValue(err.message);
+      }
+    }
+);
+
 export default {
   authenticateUser,
   signup,
   signin,
   forgotPassword,
   resetPassword,
+  updateProfile,
+  updateProfileImages,
 };

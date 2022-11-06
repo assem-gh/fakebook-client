@@ -3,21 +3,45 @@ import { PostGroup } from '../api/http/types';
 export interface UserState {
   id: string;
   userName: string;
-  firstName: string;
-  lastName: string;
   email: string;
   isAuthenticated: boolean;
-  profileImage: string;
-  verified: boolean;
   jwtToken: string;
+}
+
+export interface UserType {
+  id: string;
+  userName: string;
+  profile:ProfileType;
+  email: string;
+  isAuthenticated: boolean;
+  jwtToken: string;
+}
+
+export interface ProfileType {
+  id: string;
+  gender: 'male' | 'female' | 'other';
+  birthday: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string;
+  coverImage: string;
+  city: string;
+  country: string;
+  bio: string;
+  verified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UserShort {
   id: string;
   userName: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
+  profile: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: string;
+  };
 }
 
 export interface PostType {
@@ -77,7 +101,13 @@ export interface NotificationType {
 
   label: NotificationLabel;
   data: {
-    sender: UserShort;
+    sender: {
+      id: string;
+      userName: string;
+      profileImage: string;
+      firstName: string;
+      lastName: string;
+    };
     count?: number;
     relatedEntityId: string;
   };

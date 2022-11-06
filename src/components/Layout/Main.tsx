@@ -30,7 +30,7 @@ export const Main = ({ children }: MainProps) => {
 
   return (
     <>
-      <AppHeader open={opened} setOpen={setOpened} />
+      <AppHeader  setOpen={setOpened} />
       <MobileNav opened={opened} setOpened={setOpened} />
       <LeftSideBar />
       <Container size='md' mx={'auto'} className={classes.main}>

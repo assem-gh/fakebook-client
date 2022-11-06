@@ -9,10 +9,6 @@ const initialState: UserState = {
   id: '',
   email: '',
   userName: '',
-  firstName: '',
-  lastName: '',
-  profileImage: '',
-  verified: false,
   jwtToken: jwtToken || '',
   isAuthenticated: false,
 };
@@ -26,9 +22,14 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(userApi.authenticateUser.rejected, (state, action) => {
+    builder.addCase(userApi.authenticateUser.rejected, () => {
       return initialState;
     });
+    builder.addCase(userApi.updateProfile.fulfilled, (state, action) => {
+      const {user}=action.payload
+      state.email=user.email
+    });
+
     builder.addMatcher(
       isAnyOf(
         userApi.authenticateUser.fulfilled,
@@ -36,11 +37,11 @@ const userSlice = createSlice({
         userApi.signup.fulfilled
       ),
       (state, action) => {
-        return (state = {
+        return  {
           ...action.payload.user,
           isAuthenticated: true,
           jwtToken: action.payload.jwtToken,
-        });
+        };
       }
     );
   },

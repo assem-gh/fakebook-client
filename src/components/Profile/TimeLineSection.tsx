@@ -1,4 +1,4 @@
-import { Group, Paper } from '@mantine/core';
+import { Group} from '@mantine/core';
 import { useAppSelector } from '../../store/hooks';
 import { CreatePostBox } from '../CreatePost/CreatePostBox';
 import { Post } from '../Post/Post';

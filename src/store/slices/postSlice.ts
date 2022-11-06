@@ -39,7 +39,12 @@ const postSlice = createSlice({
       return initialState;
     });
 
-    builder.addCase(postApi.createPost.fulfilled, (state, action) => {});
+    builder.addCase(postApi.createPost.fulfilled, (state, action) => {
+      const newPost=action.payload
+      state.entities[newPost.id]=newPost
+      state.owned=[newPost.id,...state.owned]
+      state.feeds=[newPost.id,...state.feeds]
+    });
 
     builder.addCase(postApi.getPosts.fulfilled, (state, action) => {
       const { group } = action.meta.arg;
@@ -53,9 +58,11 @@ const postSlice = createSlice({
 
       if (group !== 'saved') {
         state.hasNext[group] = action.payload.hasNext;
-        group === 'feeds'
-          ? (state.next[group] = action.payload.next)
-          : (state.next[group] = parseInt(action.payload.next)) || -1;
+        if (group === 'feeds') {
+          state.next[group] = action.payload.next;
+        } else {
+          (state.next[group] = parseInt(action.payload.next)) ;
+        }
       }
     });
 
@@ -119,5 +126,4 @@ const postSlice = createSlice({
   },
 });
 
-export const {} = postSlice.actions;
 export const postReducer = postSlice.reducer;

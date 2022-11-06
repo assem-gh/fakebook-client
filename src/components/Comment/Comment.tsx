@@ -45,7 +45,7 @@ export const Comment = ({ commentId }: Props) => {
         <Avatar
           radius='xl'
           size={32}
-          src={comment.owner.profileImage}
+          src={comment.owner.profile.profileImage}
           mt='xs'
         />
         <Group spacing={0} direction='column' sx={{ flexGrow: 1 }}>

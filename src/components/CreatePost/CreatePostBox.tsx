@@ -23,10 +23,12 @@ const useStyles = createStyles((theme) => ({
 
 interface CreatePostProps {}
 
-export const CreatePostBox = ({}: CreatePostProps) => {
+export const CreatePostBox = (props: CreatePostProps) => {
   const [opened, setOpened] = useState(false);
 
-  const profileImage = useAppSelector((state) => state.user.profileImage);
+  const profileImage = useAppSelector(
+    (state) => state.profile.profileImage
+  );
 
   const { classes } = useStyles();
 

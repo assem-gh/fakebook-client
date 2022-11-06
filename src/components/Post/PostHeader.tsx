@@ -24,7 +24,7 @@ export const PostHeader = ({ postId }: PostHeaderProps) => {
   return (
     <Group position='apart' px='md'>
       <Group spacing={12}>
-        <Avatar size={32} radius='xl' src={owner?.profileImage} />
+        <Avatar size={32} radius='xl' src={owner.profile.profileImage} />
         <Group direction='column' spacing={4}>
           <Text size='sm'> {owner?.userName}</Text>
           <Text size='xs' color='dimmed' mt={-6}>

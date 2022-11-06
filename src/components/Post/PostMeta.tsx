@@ -25,15 +25,17 @@ export const PostMeta = ({ postId }: Props) => {
   const postLikes = useAppSelector(
     (state) => state.posts.entities[postId].likes
   );
+  const postCommentsIds = useAppSelector(
+      (state) => state.posts.entities[postId].commentsIds
+  );
+
 
   const likedByUser = useMemo(
     () => postLikes?.some((user) => user.id === userId),
     [postLikes, userId]
   );
 
-  const commentsCount = useAppSelector(
-    (state) => state.posts.entities[postId].commentsIds
-  )?.length;
+  const commentsCount = postCommentsIds.length
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ export const PostMeta = ({ postId }: Props) => {
       <Group position='left' spacing={8}>
         <AvatarsGroup size={28} limit={3} total={postLikes?.length}>
           {postLikes?.map((u) => (
-            <Avatar key={u.id} src={u.profileImage} />
+            <Avatar key={u.id} src={u.profile.profileImage} />
           ))}
         </AvatarsGroup>
       </Group>

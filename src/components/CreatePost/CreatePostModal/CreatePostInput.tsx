@@ -26,7 +26,7 @@ export const CreatePostInput = ({
   content,
   dispatch,
 }: CreatePostInputProps) => {
-  const firstName = useAppSelector((state) => state.user.firstName);
+  const firstName = useAppSelector((state) => state.profile.firstName);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { classes } = useStyles();

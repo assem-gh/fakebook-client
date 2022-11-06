@@ -53,7 +53,6 @@ interface SliderProps {
 export const ImagesSlider = ({ postId }: SliderProps) => {
   const [index, setIndex] = useState(0);
   const images = useAppSelector((state) => state.posts.entities[postId].images);
-  const { theme, classes } = useStyles();
 
   return (
     <Box
@@ -85,7 +84,7 @@ export const ImagesSlider = ({ postId }: SliderProps) => {
           '& img': { width: '100%', maxHeight: '400px' },
         }}
       >
-        <img src={images[index]} />
+        <img src={images[index]} alt="post-image" />
         <Indicator num={images.length} setIndex={setIndex} index={index} />
       </Box>
     </Box>

@@ -46,13 +46,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface Props {}
 
-const bgImage =
-  'http://www.thewowstyle.com/wp-content/uploads/2015/01/facebook-cover-balloons-sunset-view-facebook-cover.jpg';
+export const ProfileHeader = () => {
+  const {coverImage,profileImage,firstName,lastName} = useAppSelector((state) => state.profile);
 
-export const ProfileHeader = ({}: Props) => {
-  const user = useAppSelector((state) => state.user);
   const isConnected = false;
 
   const { classes } = useStyles();
@@ -60,7 +57,7 @@ export const ProfileHeader = ({}: Props) => {
   return (
     <Paper shadow='xs' px={0} radius='md' className={classes.paper}>
       <Box
-        sx={{ backgroundImage: `url(${bgImage})` }}
+        sx={{ backgroundImage: `url(${coverImage})` ,backgroundPosition:'center',backgroundSize:'100%'}}
         className={classes.coverImage}
       ></Box>
 
@@ -74,13 +71,13 @@ export const ProfileHeader = ({}: Props) => {
             color={isConnected ? 'green' : 'gray'}
             withBorder
           >
-            <Avatar src={user.profileImage} size={120} radius={120} />
+            <Avatar src={profileImage} size={120} radius={120} />
           </Indicator>
         </Box>
 
         <Group direction='column' position='center' spacing={0} mt={24} mb={8}>
           <Text align='center' size='xl' weight={700} mb={-4}>
-            {`${user.firstName} ${user.lastName}`}
+            {`${firstName} ${lastName}`}
           </Text>
           <Text align='center' size='sm' color='dimmed'>
             City - Country
